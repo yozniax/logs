@@ -567,6 +567,16 @@ body {
 }
 
 /* About Page */
+.about-page .about-photo {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: 0 0 16px 0;
+  filter: grayscale(100%);
+}
+
 .about-page h2 {
   font-size: 1.4rem;
   font-weight: 700;
