@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% seo %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPMincho:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-container">
+      <h1 class="site-title">
+        <a href="{{ '/' | relative_url }}">{{ site.title }}</a>
+      </h1>
+      {% if site.about_icon %}
+      <a href="{{ '/about/' | relative_url }}" class="about-link" aria-label="About">
+        <img src="{{ site.about_icon | relative_url }}" alt="about me" class="about-icon" width="32" height="32">
+      </a>
+      {% else %}
+      <a href="{{ '/about/' | relative_url }}" class="about-link">about me</a>
+      {% endif %}
+    </div>
+  </header>
+
+  {{ content }}
+
+  <footer class="site-footer">
+    <div class="container footer-container">
+      <p>{{ site.footer_copyright | default: site.title }}</p>
+    </div>
+  </footer>
+</body>
+</html>

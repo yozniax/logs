@@ -1,0 +1,64 @@
+---
+layout: default
+---
+<main class="site-content">
+  <div class="container">
+    {{ content }}
+
+    <div class="post-list">
+      {% for post in site.posts %}
+      <article class="post-item">
+        <div class="post-item-row">
+          <h2 class="post-item-title">
+            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+          </h2>
+          <div class="post-item-model-wrap">
+            {% include model_byline.html doc=post %}
+          </div>
+          <time class="post-item-date" datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y-%m-%d" }}</time>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+
+    {% if site.posts.size > 0 %}
+    <div class="index-footer-meta footer-tags">
+      {% assign sorted_tags = site.tags | sort %}
+      {% if sorted_tags.size > 0 %}
+      <div class="footer-tag-section models-tag-cloud">
+        <strong>Models:</strong>
+        <span class="tag-cloud-wrap">
+        {% for tag in sorted_tags %}
+          {% unless forloop.first %}<span class="tag-sep">,</span>{% endunless %}
+          {% assign tag_name = tag[0] %}
+          {% assign slug = site.data.tag_slugs[tag_name] %}
+          {% if slug %}
+          <a href="{{ '/model/' | append: slug | append: '/' | relative_url }}" class="footer-tag-link model-tag">{{ tag_name }}</a>
+          {% else %}
+          <span class="model-tag-noslug">{{ tag_name }}</span>
+          {% endif %}
+        {% endfor %}
+        </span>
+      </div>
+      {% endif %}
+      <div class="footer-tag-section published-month-links">
+        <strong>Published:</strong>
+        <span class="tag-cloud-wrap">
+        {% assign prev_ym_pub = "" %}
+        {% assign first_pub_link = true %}
+        {% for post in site.posts %}
+          {% assign ym = post.date | date: "%Y-%m" %}
+          {% if ym != prev_ym_pub %}
+            {% unless first_pub_link %}<span class="tag-sep">,</span>{% endunless %}
+            {% assign parts = ym | split: "-" %}
+            <a href="{{ '/archive/' | append: parts[0] | append: '/' | append: parts[1] | append: '/' | relative_url }}" class="footer-tag-link published-tag">{{ ym }}-01</a>
+            {% assign first_pub_link = false %}
+            {% assign prev_ym_pub = ym %}
+          {% endif %}
+        {% endfor %}
+        </span>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</main>

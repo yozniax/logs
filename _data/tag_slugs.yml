@@ -1,0 +1,11 @@
+# モデル名（tags）→ URL スラッグ（/model/<slug>/）。新しいモデルを追加したらここと model/*.md を更新してください。
+"北大路魯山人": roku-kitaoji
+"安部公房": kobo-abe
+"柿本人麻呂": hitomaro-kakinomoto
+"中原中也": chuya-nakahara
+"村上春樹": haruki-murakami
+"太宰治": osamu-dazai
+"司馬遼太郎": ryotaro-shiba
+"泉鏡花": kyoka-izumi
+"織田作之助": sakunosuke-oda
+"菊池寛": kan-kikuchi

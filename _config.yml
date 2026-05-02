@@ -3,8 +3,18 @@ description: GitHub Pages + Jekyll で運用するブログ
 url: "https://yozniax.github.io"
 baseurl: "/logs"
 
+repository: yozniax/logs
+
+# フッター（© の文言）。未設定時は title のみ表示されます。
+footer_copyright: "© 2016–2026 logs. All rights reserved."
+
+# About の右上アイコン（任意）。例: assets/images/about.jpg を置いたらパスを指定。
+# about_icon: /assets/images/about.jpg
+
 markdown: kramdown
-theme: minima
+
+# 記事 URL（例: /logs/posts/2026/05/03/permalink-sample/）
+permalink: /posts/:year/:month/:day/:title/
 
 plugins:
   - jekyll-feed
@@ -13,6 +23,7 @@ plugins:
 author:
   name: Your Name
 
+# 投稿の画像は assets/post-images/ に置く（Jekyll は _ で始まるフォルダを出力しません）
 exclude:
   - Gemfile
   - Gemfile.lock
