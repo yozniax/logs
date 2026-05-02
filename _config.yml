@@ -12,8 +12,8 @@ repository: yozniax/logs
 # フッター（© の文言）。未設定時は title のみ表示されます。
 footer_copyright: "© 2016–2026 Brilliant Scape. All rights reserved."
 
-# About の右上アイコン（任意）。例: assets/images/about.jpg を置いたらパスを指定。
-# about_icon: /assets/images/about.jpg
+# About リンク横のアイコン（ヘッダー）
+about_icon: /assets/post-images/champlasonic.jpg
 
 markdown: kramdown
 

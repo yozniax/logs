@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="{{ '/assets/post-images/favicon.ico' | relative_url }}" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ '/assets/post-images/favicon-32x32.png' | relative_url }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ '/assets/post-images/favicon-16x16.png' | relative_url }}">
   {% seo %}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,13 +18,9 @@
       <h1 class="site-title">
         <a href="{{ '/' | relative_url }}">{{ site.title }}</a>
       </h1>
-      {% if site.about_icon %}
       <a href="{{ '/about/' | relative_url }}" class="about-link" aria-label="About">
-        <img src="{{ site.about_icon | relative_url }}" alt="about me" class="about-icon" width="32" height="32">
+        <img src="{{ site.about_icon | default: '/assets/post-images/champlasonic.jpg' | relative_url }}" alt="" width="32" height="32" class="about-icon">
       </a>
-      {% else %}
-      <a href="{{ '/about/' | relative_url }}" class="about-link">about me</a>
-      {% endif %}
     </div>
   </header>
 
