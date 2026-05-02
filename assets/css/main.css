@@ -201,11 +201,61 @@ body {
 }
 
 .post-title {
-  margin-bottom: 16px;
+  margin-bottom: 0;
   font-size: 1.8rem;
   font-weight: 700;
   letter-spacing: 0.03em;
   line-height: 1.3;
+}
+
+/* 投稿ヘッダー: Title は単独行、その下で Model と Published を右寄せ */
+.post-header .post-title {
+  margin-bottom: 10px;
+}
+
+.post-header-meta-row {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: baseline;
+  gap: 12px 20px;
+}
+
+.post-header-model-wrap {
+  flex-shrink: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: right;
+}
+
+.post-header-model-wrap .post-item-model {
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+}
+
+.post-header-published {
+  flex-shrink: 0;
+  text-align: right;
+  white-space: nowrap;
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: #999;
+}
+
+.post-header-published .post-published-archive-link {
+  color: inherit;
+}
+
+.post-published-archive-link {
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.post-published-archive-link:hover {
+  opacity: 0.65;
 }
 
 .post-meta {
@@ -673,5 +723,9 @@ body {
     justify-self: end;
     text-align: right;
     white-space: nowrap;
+  }
+
+  .post-header-meta-row {
+    gap: 8px 12px;
   }
 }

@@ -6,11 +6,15 @@ layout: default
     <article class="post">
       <header class="post-header">
         <h1 class="post-title">{{ page.title }}</h1>
-        <div class="post-meta">
-          <div class="post-meta-line">
-            <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%Y年%m月%d日" }}</time>
+        <div class="post-header-meta-row">
+          <div class="post-header-model-wrap">
+            {% include model_byline.html doc=page variant='post' %}
           </div>
-          {% include model_byline.html doc=page variant='post' %}
+          {% assign pub_ym = page.date | date: "%Y-%m" %}
+          {% assign pub_parts = pub_ym | split: "-" %}
+          <time class="post-header-published" datetime="{{ page.date | date_to_xmlschema }}">
+            <a href="{{ '/archive/' | append: pub_parts[0] | append: '/' | append: pub_parts[1] | append: '/' | relative_url }}" class="post-published-archive-link">{{ page.date | date: "%Y-%m-%d" }}</a>
+          </time>
         </div>
       </header>
 

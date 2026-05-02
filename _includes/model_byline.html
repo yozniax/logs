@@ -4,7 +4,7 @@
 {% assign mtag = d.tags | first %}
 {% assign mslug = site.data.tag_slugs[mtag] %}
 {% if variant == 'post' %}
-<div class="post-meta-model">by {% if mslug %}<a href="{{ '/model/' | append: mslug | append: '/' | relative_url }}" class="post-meta-model-link">{{ mtag }}</a>{% else %}{{ mtag }}{% endif %} model</div>
+<span class="post-item-model">by {% if mslug %}<a href="{{ '/model/' | append: mslug | append: '/' | relative_url }}" class="post-item-model-link">{{ mtag }}</a>{% else %}{{ mtag }}{% endif %} model</span>
 {% else %}
 <span class="post-item-model">by {% if mslug %}<a href="{{ '/model/' | append: mslug | append: '/' | relative_url }}" class="post-item-model-link">{{ mtag }}</a>{% else %}{{ mtag }}{% endif %} model</span>
 {% endif %}

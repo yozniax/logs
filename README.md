@@ -9,11 +9,11 @@ docker compose up --build
 # または: make preview
 ```
 
-サーバーは **`0.0.0.0:4000`** で待ち受けます。ブラウザでは次を開いてください（**ルート `/` ではなく `baseurl` 付き**です）。
+サーバーは **`0.0.0.0:4000`** で待ち受けます。本番と同じく **`baseurl` は空**なので、トップは次です。
 
-**http://localhost:4000/logs/**
+**http://localhost:4000/**
 
-（`http://localhost:4000/` だけだと、プロジェクト用 `baseurl` の関係で正しく表示されないことがあります。必ず **`/logs/`** まで含めてください。）
+（旧構成で `baseurl: "/logs"` にしている場合だけ **`http://localhost:4000/logs/`** になります。）
 
 ### 表示されない・`docker compose` が失敗する場合（Linux）
 
@@ -40,7 +40,7 @@ newgrp docker
 docker run --rm hello-world
 ```
 
-成功したら、もう一度 `docker compose up --build` を実行し、**http://localhost:4000/logs/** を開いてください。
+成功したら、もう一度 `docker compose up --build` を実行し、**http://localhost:4000/** を開いてください。
 
 Cursor / VS Code では **「Dev Containers: Reopen in Container」** でこのフォルダをコンテナで開くと、ポート 4000 の転送通知からも開けます。
 
@@ -51,7 +51,7 @@ bundle install
 bundle exec jekyll serve --host 0.0.0.0 --livereload
 ```
 
-表示 URL は **`http://127.0.0.1:4000/logs/`** です。
+表示 URL は **`http://127.0.0.1:4000/`** です（`baseurl` 空のため）。
 
 ## GitHub Pages で公開
 
@@ -61,7 +61,27 @@ bundle exec jekyll serve --host 0.0.0.0 --livereload
    - Source: **Deploy from a branch**
    - Branch: **main** / **/(root)**
 
-`_config.yml` の `url` を自分のサイト URL に書き換えてください。プロジェクトサイト（`username.github.io/repo-name/`）の場合は `baseurl: "/repo-name"` を設定します。
+本番は **`https://briscape.com`**（ルートに index。サブドメインは不要）。`_config.yml` の `url` / `baseurl` とリポジトリルートの **`CNAME`** がそれに合わせてあります。
+
+## Cloudflare で apex（briscape.com）を向ける（GitHub Pages）
+
+前提: **briscape.com** の DNS が [Cloudflare](https://www.cloudflare.com/) 管理であること。
+
+1. **GitHub（例: リポジトリ `yozniax/logs`）**  
+   - **Settings → Pages → Custom domain** に **`briscape.com`** を追加。  
+   - **Enforce HTTPS** を有効にする。  
+   - ルートの **`CNAME`** ファイルは **`briscape.com`** の一行（このリポジトリに含める）。
+
+2. **Cloudflare → DNS（apex）**  
+   - **名前 `@`** に GitHub Pages 用の **A レコード**を追加する（[公式の IP 一覧](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site#configuring-an-apex-domain)）。  
+   - または Cloudflare の **CNAME flattening** で `briscape.com` を **`yozniax.github.io`** に向ける設定が使える場合は、その方法でも可。  
+   - **SSL/TLS** は通常 **Full**。証明書が有効になるまで数分〜最大48時間かかることがあります。
+
+3. **`_config.yml`**  
+   - `url: "https://briscape.com"`、`baseurl: ""` で問題ありません。
+
+4. **ローカルプレビュー**  
+   - **`http://localhost:4000/`** がトップです。
 
 ## 投稿の追加
 

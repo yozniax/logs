@@ -1,0 +1,7 @@
+# 本番は _config.yml で url: https://briscape.com / baseurl: "" に設定済み。
+# 別ドメイン試験用にだけ、このファイルを _config_custom_domain.yml にコピーして調整してください。
+#
+#   bundle exec jekyll build --config _config.yml,_config_custom_domain.yml
+
+url: "https://briscape.com"
+baseurl: ""

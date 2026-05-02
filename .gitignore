@@ -1,3 +1,6 @@
+# ローカル専用の Jekyll 上書き（カスタムドメインの url 試行用・任意）
+_config_custom_domain.yml
+
 _site/
 .sass-cache/
 .jekyll-cache/

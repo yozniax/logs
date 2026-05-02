@@ -1,19 +1,23 @@
-title: logs
-description: GitHub Pages + Jekyll で運用するブログ
-url: "https://yozniax.github.io"
-baseurl: "/logs"
+# 本番: https://briscape.com をルートに表示（サブドメイン不要）。baseurl は空。
+# ローカルで /logs 付きプレビューが必要な場合は _config_local.yml で上書きする。
+title: "Brilliant Scape"
+description: "Brilliant Scape — briscape.com のブログ（GitHub Pages + Jekyll）。"
+url: "https://briscape.com"
+baseurl: ""
+
+lang: ja
 
 repository: yozniax/logs
 
 # フッター（© の文言）。未設定時は title のみ表示されます。
-footer_copyright: "© 2016–2026 logs. All rights reserved."
+footer_copyright: "© 2016–2026 Brilliant Scape. All rights reserved."
 
 # About の右上アイコン（任意）。例: assets/images/about.jpg を置いたらパスを指定。
 # about_icon: /assets/images/about.jpg
 
 markdown: kramdown
 
-# 記事 URL（例: /logs/posts/2026/05/03/permalink-sample/）
+# 記事 URL（例: /posts/2026/05/03/permalink-sample/）
 permalink: /posts/:year/:month/:day/:title/
 
 plugins:
@@ -21,7 +25,11 @@ plugins:
   - jekyll-seo-tag
 
 author:
-  name: Your Name
+  name: Yo Yoshizaki
+
+# GitHub Pages のカスタムドメイン用（ビルド出力に含める）
+include:
+  - CNAME
 
 # 投稿の画像は assets/post-images/ に置く（Jekyll は _ で始まるフォルダを出力しません）
 exclude:
