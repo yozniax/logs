@@ -1,0 +1,20 @@
+title: マイブログ
+description: GitHub Pages + Jekyll で運用するブログ
+url: "https://YOUR_USERNAME.github.io"
+baseurl: ""
+
+markdown: kramdown
+theme: minima
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+author:
+  name: Your Name
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - vendor
