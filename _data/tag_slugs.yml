@@ -1,4 +1,4 @@
-# モデル名（tags）→ URL スラッグ（/model/<slug>/）。新しいモデルを追加したらここと model/*.md を更新してください。
+# モデル名（tags）→ URL スラッグ（/model/<slug>/）。スラッグは名姓のローマ字順（例: haruki-murakami）。新しいモデルを追加したらここと model/*.md を更新してください。
 "北大路魯山人": roku-kitaoji
 "安部公房": kobo-abe
 "柿本人麻呂": hitomaro-kakinomoto
@@ -10,7 +10,7 @@
 "織田作之助": sakunosuke-oda
 "菊池寛": kan-kikuchi
 "林芙美子": fumiko-hayashi
-"中谷宇吉郎": nakatani-ukichiro
-"町田町蔵": machida-machizo
-"寺山修司": terayama-shuji
-"坂口安吾": sakaguchi-ango
+"中谷宇吉郎": ukichiro-nakatani
+"町田町蔵": machizo-machida
+"寺山修司": shuji-terayama
+"坂口安吾": ango-sakaguchi
