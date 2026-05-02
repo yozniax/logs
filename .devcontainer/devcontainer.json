@@ -1,0 +1,24 @@
+{
+  "name": "Jekyll (logs)",
+  "dockerComposeFile": ["../docker-compose.yml"],
+  "service": "jekyll",
+  "workspaceFolder": "/srv/jekyll",
+  "overrideCommand": false,
+  "forwardPorts": [4000, 35729],
+  "portsAttributes": {
+    "4000": {
+      "label": "Jekyll HTTP",
+      "onAutoForward": "notify"
+    },
+    "35729": {
+      "label": "LiveReload"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  }
+}
