@@ -1,88 +1,83 @@
-# Jekyll + GitHub Pages ブログ
+# Brilliant Scape
 
-## プレビュー（推奨: Docker）
+[Jekyll](https://jekyllrb.com/) と [GitHub Pages](https://pages.github.com/) で公開する個人ブログです。
 
-Ruby をローカルに入れずに表示できます。Docker を入れたうえで:
+| 項目 | 値 |
+|------|-----|
+| 本番 | **https://briscape.com** |
+| GitHub | [`yozniax/logs`](https://github.com/yozniax/logs) |
+| Jekyll | `github-pages` バンドル（`Gemfile` 参照） |
+
+`baseurl` は空で、サイトルートがそのままトップになります。カスタムドメイン用にルートに **`CNAME`**（`briscape.com`）があります。
+
+## このリポジトリの構成
+
+| パス | 役割 |
+|------|------|
+| `index.md` + `_layouts/home.html` | トップ（記事一覧、Models / Published のタグ風リンク） |
+| `_posts/*.md` | 記事。パーマリンクは `_config.yml` の `permalink` に従う（任意で `permalink:` で上書き可） |
+| `model/*.md` | 各「モデル」（文体の参照元としての作家）の紹介ページ |
+| `_data/tag_slugs.yml` | 記事の `tags` の先頭をモデル名として扱い、`/model/<slug>/` に対応づける |
+| `archive/<year>/<month>/index.md` | 月別アーカイブ（Published からリンク） |
+| `about.md` | `/about/` |
+| `assets/css/main.css` | スタイル |
+| `assets/post-images/` | 記事画像・**favicon**（`.ico` / `favicon-*.png`）・ヘッダー用 `about_icon` 画像など |
+
+プラグインは `_config.yml` のとおり `jekyll-feed` と `jekyll-seo-tag`（`github-pages` に含まれる想定）です。
+
+## ローカルプレビュー（推奨: Docker）
+
+Ruby を入れずに動かせます。
 
 ```bash
 docker compose up --build
 # または: make preview
 ```
 
-サーバーは **`0.0.0.0:4000`** で待ち受けます。本番と同じく **`baseurl` は空**なので、トップは次です。
+**http://localhost:4000/** がトップです（`baseurl` 空のため）。
 
-**http://localhost:4000/**
+Livereload は `35729` も公開しています。Linux で Docker に接続できない場合は、従来どおりユーザーを `docker` グループに入れる／`newgrp docker` などで権限を確認してください。
 
-（旧構成で `baseurl: "/logs"` にしている場合だけ **`http://localhost:4000/logs/`** になります。）
-
-### 表示されない・`docker compose` が失敗する場合（Linux）
-
-次のエラーは **Docker デーモンに接続する権限がない** 状態です。
-
-`permission denied while trying to connect to the docker API at unix:///var/run/docker.sock`
-
-1. **Docker Desktop を起動したまま**にする（タスクトレイ／メニューから実行）。
-2. 自分のユーザーを **`docker` グループ**に入れる（一度だけ、パスワード入力が必要です）。
-
-```bash
-sudo usermod -aG docker "$USER"
-```
-
-3. **ログアウトして再ログイン**するか、PC を再起動する（グループ変更の反映に必要です）。すぐ試すだけなら次でも可です。
-
-```bash
-newgrp docker
-```
-
-4. 確認:
-
-```bash
-docker run --rm hello-world
-```
-
-成功したら、もう一度 `docker compose up --build` を実行し、**http://localhost:4000/** を開いてください。
-
-Cursor / VS Code では **「Dev Containers: Reopen in Container」** でこのフォルダをコンテナで開くと、ポート 4000 の転送通知からも開けます。
-
-## セットアップ（ローカルに Ruby がある場合）
+## ローカルプレビュー（Ruby あり）
 
 ```bash
 bundle install
 bundle exec jekyll serve --host 0.0.0.0 --livereload
 ```
 
-表示 URL は **`http://127.0.0.1:4000/`** です（`baseurl` 空のため）。
+**http://127.0.0.1:4000/** で閲覧できます。
 
-## GitHub Pages で公開
+## 設定の上書き（任意）
 
-1. GitHub にリポジトリを作成（ユーザー公開サイトなら `YOUR_USERNAME.github.io`）。
-2. このリポジトリの内容を push。
-3. **Settings → Pages → Build and deployment**
-   - Source: **Deploy from a branch**
-   - Branch: **main** / **/(root)**
+`_config.yml` のコメントどおり、ローカルだけ別 URL にしたい場合は **`_config_local.yml`** を用意し、`jekyll serve --config _config.yml,_config_local.yml` のように複数指定してください（ファイルが無ければそのままで問題ありません）。
 
-本番は **`https://briscape.com`**（ルートに index。サブドメインは不要）。`_config.yml` の `url` / `baseurl` とリポジトリルートの **`CNAME`** がそれに合わせてあります。
+## GitHub Pages での公開
 
-## Cloudflare で apex（briscape.com）を向ける（GitHub Pages）
+1. このリポジトリを `main`（など）に push する。  
+2. リポジトリの **Settings → Pages** で、デプロイ元ブランチを **`/(root)`** に設定する。  
+3. カスタムドメインは **Settings → Pages → Custom domain** に `briscape.com` を追加し、**Enforce HTTPS** を有効にする。ルートの **`CNAME`** がビルド成果物に含まれるよう `_config.yml` の `include` に入っています。
 
-前提: **briscape.com** の DNS が [Cloudflare](https://www.cloudflare.com/) 管理であること。
+DNS が Cloudflare 管理の場合は、GitHub の [apex 用ドキュメント](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site#configuring-an-apex-domain)に沿って A レコードまたは CNAME フラット化を設定し、SSL/TLS は通常 **Full** でよいです。反映まで数分〜最大 48 時間かかることがあります。
 
-1. **GitHub（例: リポジトリ `yozniax/logs`）**  
-   - **Settings → Pages → Custom domain** に **`briscape.com`** を追加。  
-   - **Enforce HTTPS** を有効にする。  
-   - ルートの **`CNAME`** ファイルは **`briscape.com`** の一行（このリポジトリに含める）。
+## 記事の追加
 
-2. **Cloudflare → DNS（apex）**  
-   - **名前 `@`** に GitHub Pages 用の **A レコード**を追加する（[公式の IP 一覧](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site#configuring-an-apex-domain)）。  
-   - または Cloudflare の **CNAME flattening** で `briscape.com` を **`yozniax.github.io`** に向ける設定が使える場合は、その方法でも可。  
-   - **SSL/TLS** は通常 **Full**。証明書が有効になるまで数分〜最大48時間かかることがあります。
+1. `_posts/YYYY-MM-DD-slug.md` を作成する。  
+2. フロントマター例:
 
-3. **`_config.yml`**  
-   - `url: "https://briscape.com"`、`baseurl: ""` で問題ありません。
+```yaml
+---
+layout: post
+title: "タイトル"
+date: YYYY-MM-DD
+tags:
+  - 作家名   # 先頭が「モデル」として表示・リンクされる（_data/tag_slugs.yml に定義がある場合）
+permalink: /custom-path/   # 任意
+image:   # 任意。画像は assets/post-images/ を参照
+---
+```
 
-4. **ローカルプレビュー**  
-   - **`http://localhost:4000/`** がトップです。
+3. 新しいモデル（作家）を増やすときは **`model/<slug>.md`** を追加し、**`_data/tag_slugs.yml`** に `"作家名": slug` を追記する。
 
-## 投稿の追加
+## README について
 
-`_posts/YYYY-MM-DD-slug.md` を作成し、フロントマターに `layout: post` と `title`, `date` を書いて commit / push します。
+本ファイルは **GitHub Pages のビルドから除外**されています（`_config.yml` の `exclude`）。

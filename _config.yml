@@ -1,7 +1,7 @@
 # 本番: https://briscape.com をルートに表示（サブドメイン不要）。baseurl は空。
 # ローカルで /logs 付きプレビューが必要な場合は _config_local.yml で上書きする。
 title: "Brilliant Scape"
-description: "Brilliant Scape — briscape.com のブログ（GitHub Pages + Jekyll）。"
+description: "文豪の文体をお借りして経験と想いと考えを書いています"
 url: "https://briscape.com"
 baseurl: ""
 
