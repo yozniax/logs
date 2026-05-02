@@ -15,6 +15,9 @@ footer_copyright: "© 2016–2026 Brilliant Scape. All rights reserved."
 # About リンク横のアイコン（ヘッダー）
 about_icon: /assets/post-images/champlasonic.jpg
 
+# Google Analytics 4（gtag）。ローカルでは _config_local.yml で google_analytics: "" として無効化可能。
+google_analytics: "G-PS43NR10MN"
+
 markdown: kramdown
 
 # 記事 URL（例: /posts/2026/05/03/permalink-sample/）

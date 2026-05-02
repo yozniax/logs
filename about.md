@@ -10,14 +10,10 @@ permalink: /about/
 
 ふだんから[青空文庫](https://www.aozora.gr.jp/)を乱読していて、Xで[#青空文庫ザッピング](https://x.com/hashtag/%E9%9D%92%E7%A9%BA%E6%96%87%E5%BA%AB%E3%82%B6%E3%83%83%E3%83%94%E3%83%B3%E3%82%B0)もしているので、そうした読みの延長としてこのサイトも位置づけています。
 
-<img src="{{ site.about_icon | default: '/assets/post-images/champlasonic.jpg' | relative_url }}" alt="" class="about-photo" width="72" height="72" loading="lazy" decoding="async">
-
 - [X](https://x.com/yozniax)
 - [LinkedIn](https://www.linkedin.com/in/champlasonic/)
 
+<img src="{{ site.about_icon | default: '/assets/post-images/champlasonic.jpg' | relative_url }}" alt="" class="about-photo" width="72" height="72" loading="lazy" decoding="async">
+
 **{{ site.author.name }}**
- — PdM/PO、tiny entrepreneur、reader/writer、instant DJ and so on
-
-
-
 
