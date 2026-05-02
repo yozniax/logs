@@ -51,7 +51,7 @@ layout: default
           {% if ym != prev_ym_pub %}
             {% unless first_pub_link %}<span class="tag-sep">,</span>{% endunless %}
             {% assign parts = ym | split: "-" %}
-            <a href="{{ '/archive/' | append: parts[0] | append: '/' | append: parts[1] | append: '/' | relative_url }}" class="footer-tag-link published-tag">{{ ym }}-01</a>
+            <a href="{{ '/archive/' | append: parts[0] | append: '/' | append: parts[1] | append: '/' | relative_url }}" class="footer-tag-link published-tag">{{ ym }}</a>
             {% assign first_pub_link = false %}
             {% assign prev_ym_pub = ym %}
           {% endif %}
