@@ -6,10 +6,10 @@ tags:
   - 三島由紀夫
 
 permalink: /brilliant-jerk/
-image: /assets/post-images/20260503-brilliant-jerk.jpg
+image: /assets/post-images/20260503-brilliant-jerk.png
 ---
 
-![ブリリアントジャーク]({{ '/assets/post-images/20260503-brilliant-jerk.jpg' | relative_url }})
+![ブリリアントジャーク]({{ '/assets/post-images/20260503-brilliant-jerk.png' | relative_url }})
 
 長く、大小さまざまな組織の一員として働いてきた。企画、営業、事業開発と呼ばれる領域で、決して頭角を現したとは思わないが、当たりも外れも経験してきた。外れのほうが数では勝っている。しばしば事業のチームを任され、中にはエンジニアやデザイナーがいて、外側には別部署の承認者や顧客——名ばかりの「ステークホルダー」が渦を巻く。責任の所在だけは鮮明に見える。会議の数は増え、意思決定の輪郭は細くなっていった気もする。
 
