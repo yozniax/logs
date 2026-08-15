@@ -61,6 +61,32 @@ DNS が Cloudflare 管理の場合は、GitHub の [apex 用ドキュメント](
 
 ## 記事の追加
 
+乱雑なメモからでよい。LINE の下書きをコピーして投げてよい。本文の目安は **800字**。
+
+### いちばん楽な流れ
+
+1. GitHub で **[Issue](https://github.com/yozniax/logs/issues/new?template=article.yml)** 「記事メモ」を開く。  
+2. メモを貼る。モデルは「おまかせ」（候補が3つ付く）か「ランダム」、または作家名。  
+3. 候補の番号を Issue に返信するか、Cursor Cloud Agent にその Issue を渡す。  
+4. エージェントが `_posts/` の原稿を pull request にする。
+
+チャットにメモをそのまま貼っても同じ。モデルを言わなければ、候補を3つ出してから書く。
+
+LINE から投げるときは、トークの下書きをコピーして Issue の「メモ」へ貼る。スマホの GitHub でも同じテンプレートが開く。LINE Bot は置いていない。
+
+```bash
+# メモから候補を見る / ランダムに一人選ぶ
+ruby scripts/article.rb suggest --notes '昼から酒。街は外国人ばかり。'
+ruby scripts/article.rb random
+
+# 骨格だけ先に置く（本文はモデルの声で書き直す）
+ruby scripts/article.rb scaffold --model random --title "題" --slug example
+```
+
+詳細な約束は **`AGENTS.md`**。モデルの声は **`_data/models.yml`**。
+
+### 手でファイルを置く場合
+
 1. `_posts/YYYY-MM-DD-slug.md` を作成する。  
 2. フロントマター例:
 
@@ -76,7 +102,7 @@ image:   # 任意。画像は assets/post-images/ を参照
 ---
 ```
 
-3. 新しいモデル（作家）を増やすときは **`model/<slug>.md`** を追加し、**`_data/tag_slugs.yml`** に `"作家名": slug` を追記する。
+3. 新しいモデル（作家）を増やすときは **`model/<slug>.md`** を追加し、**`_data/tag_slugs.yml`** と **`_data/models.yml`** に同じ作家名を追記する。
 
 ## README について
 

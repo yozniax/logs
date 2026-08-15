@@ -39,6 +39,10 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - README.md
+  - AGENTS.md
   - Dockerfile
   - docker-compose.yml
   - vendor
+  - scripts
+  - .cursor
+  - .github

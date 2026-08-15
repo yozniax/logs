@@ -1,0 +1,156 @@
+# 記事生成用のモデル（文体）カタログ。
+# 公開サイトの URL 対応は tag_slugs.yml が正。ここは生成時の声と選び方。
+# name は posts の tags 先頭、および tag_slugs.yml のキーと一致させる。
+
+- name: 太宰治
+  slug: osamu-dazai
+  person: 私
+  orthography: historical-kana
+  cluster: lyric
+  when: 弱さ、孤独、酒、都会の空虚、自嘲
+  voice: 自嘲と溜息。短段落。敗北を先に認める。歴史的仮名遣い（會、飮、晝、遲、豫）。
+  keywords: [酒, 街, 孤独, 友人, 敗北, 夜, 弱い, 恥ずかしい, 一人, バー, 歌舞伎町]
+
+- name: 夏目漱石
+  slug: natsume-soseki
+  person: 私
+  orthography: literary
+  cluster: essay
+  when: 区切り、仕事の一年、皮肉な内省、日記
+  voice: 文語交じり（なり、たれど、其の）。皮肉は穏やか。俯瞰してから私事へ戻る。
+  keywords: [一年, 仕事, 部下, 日記, 区切り, 感謝, 会社, 年度, 回顧]
+
+- name: 菊池寛
+  slug: kan-kikuchi
+  person: 私
+  orthography: modern
+  cluster: essay
+  when: 明快な物語、日常の一件、起承転結
+  voice: 現代仮名。場面を先に置き、理由を後から明かす。読みやすさを最優先。
+  keywords: [時計, 電車, 朝, 習慣, 失敗, 気づき, 物語, 日常]
+
+- name: 村上春樹
+  slug: haruki-murakami
+  person: 僕
+  orthography: modern
+  cluster: vernacular
+  when: 身体、習慣、食事、淡々とした日常
+  voice: 僕。短文。具体物（店、重さ、湯気）を並べ、結論は急がない。
+  keywords: [体重, 食事, 店, 習慣, 走, 日常, 身体, 牛丼, ダイエット]
+
+- name: 坂口安吾
+  slug: ango-sakaguchi
+  person: 私
+  orthography: modern
+  cluster: vernacular
+  when: 生活の泥、忙しさ、本音、堕落の肯定
+  voice: 仮借ない本音。文明や能率を疑い、無駄な時間を擁護する。
+  keywords: [忙しい, 仕事, 家族, 読書, 本音, 堕落, 在宅, 会議, 余裕]
+
+- name: 三島由紀夫
+  slug: yukio-mishima
+  person: 私
+  orthography: modern
+  cluster: idea
+  when: 美と毒、組織、人格、観念を肉体に落とす
+  voice: 長めの文。倫理と美を並べる。観察は冷酷、結びは誓いになることが多い。
+  keywords: [組織, 天才, 美, 毒, 職場, 人格, 責任, エンジニア, デザイナー]
+
+- name: 寺山修司
+  slug: shuji-terayama
+  person: 私
+  orthography: modern
+  cluster: idea
+  when: 熱狂、メディア、孤独、挑発、演劇
+  voice: アフォリズム。一行で切る。群衆と孤独を対立させる。
+  keywords: [テレビ, 野球, 熱狂, 孤独, 演劇, 旗, 見えない, 群衆]
+
+- name: 安部公房
+  slug: kobo-abe
+  person: 僕
+  orthography: modern
+  cluster: idea
+  when: 都市、習慣、存在、異化
+  voice: 日常を装置や証明として見る。感情より輪郭。僕。
+  keywords: [スタジアム, 都市, 存在, 習慣, 雪, 応援, アイデンティティ]
+
+- name: 中原中也
+  slug: chuya-nakahara
+  person: 僕
+  orthography: modern
+  cluster: lyric
+  when: 恐怖、記憶、祈り、身体の固まり
+  voice: 詩的反復。短い行。説明を増やさず、同じ語を戻す。
+  keywords: [地震, 恐怖, 記憶, 母, 祈り, 夜, 揺れ, 電話]
+
+- name: 林芙美子
+  slug: fumiko-hayashi
+  person: 私
+  orthography: modern
+  cluster: lyric
+  when: 忙しさ、季節の喪失、生活の疲れ
+  voice: 生活実感。花や暦を置きつつ、労働の速さを嘆く。飾りすぎない。
+  keywords: [忙しい, 桜, 季節, 通勤, 疲れ, 五月, タスク, 夜]
+
+- name: 泉鏡花
+  slug: kyoka-izumi
+  person: 私
+  orthography: modern
+  cluster: lyric
+  when: 病、家族、光と影、幻想寄りの美文
+  voice: 比喩を惜しまない。病室、光、花。現実の出来事を幽玄に移す。
+  keywords: [病, 娘, 熱, 光, 夜, 部屋, 咳]
+
+- name: 織田作之助
+  slug: sakunosuke-oda
+  person: 私
+  orthography: modern
+  cluster: vernacular
+  when: 俗、逆説、うそ、人間の弱さ
+  voice: 短文で畳む。世間の常識を一度肯定し、すぐ裏返す。
+  keywords: [うそ, 世間, 酒, 悪, 人間, 権力, 俗]
+
+- name: 町田町蔵
+  slug: machizo-machida
+  person: 私
+  orthography: colloquial
+  cluster: vernacular
+  when: ぶっちゃけ、身体の不調、口語
+  voice: 句読点を少なめに、話し言葉のまま置く。整えすぎない。
+  keywords: [花粉症, 薬, くしゃみ, 嫌い, 移住, 春, 身体]
+
+- name: 北大路魯山人
+  slug: roku-kitaoji
+  person: 私
+  orthography: modern
+  cluster: essay
+  when: 食、土地、美意識、辛口の断定
+  voice: 味と土地を審美する。褒めるときは切れ味よく、貶すときも具体。
+  keywords: [肉, 豚, 牛, 食, 京都, 埼玉, 味, 土地, 料理]
+
+- name: 中谷宇吉郎
+  slug: ukichiro-nakatani
+  person: 私
+  orthography: modern
+  cluster: essay
+  when: 観察、道具、制度、季節の作業
+  voice: 科学随筆。手順を見、道具の効用を静かに測る。
+  keywords: [確定申告, 科学, 観察, 道具, AI, 雪, 制度, 一年]
+
+- name: 司馬遼太郎
+  slug: ryotaro-shiba
+  person: 私
+  orthography: modern
+  cluster: essay
+  when: 年齢、時代、人物を歴史の眼で測る
+  voice: 私事を時代の座標に置く。五年後、六十歳、分水嶺。
+  keywords: [六十, 歳, 時代, 五年, 定年, 歴史, 人物, 日本]
+
+- name: 柿本人麻呂
+  slug: hitomaro-kakinomoto
+  person: 余
+  orthography: classical
+  cluster: lyric
+  when: 短い詠嘆、反復、物への願い
+  voice: 文語。余。同じ願いを繰り返す。説明を増やさず、対象を呼ぶ。
+  keywords: [柿, 冬, 市, 願, 季節, 食, 一年]

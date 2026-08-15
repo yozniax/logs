@@ -1,0 +1,11 @@
+---
+description: 乱雑なメモから文豪モデルの短い記事を生成する
+alwaysApply: true
+---
+
+記事を頼まれたら `AGENTS.md` に従う。
+
+- 入力は LINE の下書きでも箇条書きでもよい。創造的に随筆化する。
+- モデル未指定なら 3 候補とランダムを出して待つ。指定または「ランダム」なら書く。
+- 本文は 700〜900 字。モデルは `_data/models.yml` から選ぶ。
+- `_posts/YYYY-MM-DD-slug.md` を PR にする。月が新しければ `archive/YYYY/MM/index.md` も作る。
