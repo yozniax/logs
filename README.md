@@ -19,7 +19,7 @@
 | `model/*.md` | 各「モデル」（文体の参照元としての作家）の紹介ページ |
 | `_data/tag_slugs.yml` | 記事の `tags` の先頭をモデル名として扱い、`/model/<slug>/` に対応づける |
 | `archive/<year>/<month>/index.md` | 月別アーカイブ（Published からリンク） |
-| `about.md` | `/about/` |
+| `about.md` | 旧 `/about/` から `https://www.doyo.be` へのリダイレクト |
 | `assets/css/main.css` | スタイル |
 | `assets/post-images/` | 記事画像・**favicon**（`.ico` / `favicon-*.png`）・ヘッダー用 `about_icon` 画像など |
 
