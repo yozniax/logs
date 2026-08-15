@@ -78,7 +78,7 @@ DNS が Cloudflare 管理の場合は、GitHub の [apex 用ドキュメント](
 5. `commit / push / merge を一気にやる？` と聞かれる。よいときだけ出す。
 
 モデルや日時を先に書いてよい（例: `ランダムで` / `太宰で` / `8月10日21時で` / `明日9時で`）。
-写真を添付すると、既存記事と同じ位置に記事画像として入る（iPhone の写真は縮小する）。
+写真はチャット添付だと届かないことが多い。X の投稿 URL を混ぜると、そちらの写真を記事画像にする。
 X の投稿 URL を混ぜてよい。中身を読んで書く。本文には URL を入れない。
 
 - 過去の日時 → そのタイムスタンプで、merge した瞬間に載る。  
@@ -93,7 +93,8 @@ ruby scripts/article.rb random
 ruby scripts/article.rb scaffold --model random --title "題" --slug example
 
 # 写真を記事用に縮小する / Xの投稿を読む
-ruby scripts/article.rb prepare-image --file photo.jpg --date '2026-08-15 10:00' --slug example
+ruby scripts/article.rb find-attachment
+ruby scripts/article.rb prepare-image --url 'https://x.com/user/status/123' --date '2026-08-15 10:00' --slug example
 ruby scripts/article.rb fetch-x --notes 'https://x.com/user/status/123'
 ```
 
