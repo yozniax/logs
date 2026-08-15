@@ -6,8 +6,11 @@
 
 require "yaml"
 require "date"
+require "time"
 require "optparse"
 require "fileutils"
+
+JST_OFFSET = "+09:00"
 
 ROOT = File.expand_path("..", __dir__)
 MODELS_PATH = File.join(ROOT, "_data", "models.yml")
@@ -109,6 +112,94 @@ def parse_issue_body(body)
   fields.transform_values { |v| v.to_s.gsub(/\A[[:space:]]+|[[:space:]]+\z/, "") }
 end
 
+def now_jst
+  Time.now.getlocal(JST_OFFSET)
+end
+
+def time_to_jst(time)
+  time.getlocal(JST_OFFSET)
+end
+
+def format_front_matter_date(time)
+  time_to_jst(time).strftime("%Y-%m-%d %H:%M:%S %z")
+end
+
+def parse_clock(hour, min, sec = 0)
+  [hour.to_i, (min || 0).to_i, (sec || 0).to_i]
+end
+
+def parse_jst(input, now: now_jst)
+  s = input.to_s.strip
+  s = s.gsub(/[（(]JST[）)]/i, "").gsub(/\bJST\b/i, "").strip
+  return now if s.empty? || %w[今 いま now].include?(s)
+
+  if (m = s.match(/\A(\d{4})-(\d{1,2})-(\d{1,2})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?(?:\s*[+-]\d{2}:?\d{2})?\z/))
+    h, min, sec = parse_clock(m[4] || 0, m[5], m[6])
+    return Time.new(m[1].to_i, m[2].to_i, m[3].to_i, h, min, sec, JST_OFFSET)
+  end
+
+  if (m = s.match(/\A(\d{4})\/(\d{1,2})\/(\d{1,2})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?\z/))
+    h, min, sec = parse_clock(m[4] || 0, m[5], m[6])
+    return Time.new(m[1].to_i, m[2].to_i, m[3].to_i, h, min, sec, JST_OFFSET)
+  end
+
+  base = now
+  if s.start_with?("明後日")
+    base += 2 * 86_400
+    s = s.sub(/\A明後日\s*/, "")
+  elsif s.start_with?("明日")
+    base += 86_400
+    s = s.sub(/\A明日\s*/, "")
+  elsif s.start_with?("今日")
+    s = s.sub(/\A今日\s*/, "")
+  end
+
+  if (m = s.match(/\A(\d{1,2})月(\d{1,2})日(?:\s*(\d{1,2})時(?:(\d{1,2})分)?)?\z/))
+    h, min, = parse_clock(m[3] || 0, m[4])
+    return Time.new(now.year, m[1].to_i, m[2].to_i, h, min, 0, JST_OFFSET)
+  end
+
+  if (m = s.match(/\A(\d{1,2}):(\d{2})(?::(\d{2}))?\z/)) || (m = s.match(/\A(\d{1,2})時(?:(\d{1,2})分)?\z/))
+    h, min, sec = parse_clock(m[1], m[2], m[3])
+    return Time.new(base.year, base.month, base.day, h, min, sec, JST_OFFSET)
+  end
+
+  Time.parse(s).getlocal(JST_OFFSET)
+end
+
+def classify_publish_at(time, now: now_jst)
+  t = time_to_jst(time)
+  n = time_to_jst(now)
+  if t <= n
+    { time: t, kind: "past", label: "#{format_front_matter_date(t)}（過去・即反映）" }
+  else
+    { time: t, kind: "future", label: "#{format_front_matter_date(t)}（未来・その時刻に反映）" }
+  end
+end
+
+def extract_front_matter_date(markdown)
+  fm = markdown.to_s[/\A---\n(.*?)\n---/m, 1]
+  return nil unless fm
+  line = fm.each_line.find { |l| l.start_with?("date:") }
+  return nil unless line
+  raw = line.sub(/\Adate:\s*/, "").strip.gsub(/\A["']|["']\z/, "")
+  parse_jst(raw)
+end
+
+def each_post_time
+  Dir[File.join(ROOT, "_posts", "*.md")].sort.map do |path|
+    time = extract_front_matter_date(File.read(path))
+    next unless time
+    { path: path, time: time_to_jst(time) }
+  end.compact
+end
+
+def due_posts(since:, now: now_jst)
+  since_t = time_to_jst(since)
+  now_t = time_to_jst(now)
+  each_post_time.select { |p| p[:time] <= now_t && p[:time] > since_t }
+end
+
 def slugify(text)
   s = text.to_s.downcase
   s = s.gsub(/[^a-z0-9]+/, "-").gsub(/\A-+|-+\z/, "")
@@ -141,7 +232,8 @@ def post_filename(date, slug)
 end
 
 def scaffold_post(models, opts)
-  date = opts[:date] || Date.today
+  published_at = opts[:date] ? time_to_jst(opts[:date]) : now_jst
+  date = published_at
   model_name = opts[:model]
   model =
     if model_name.nil? || model_name == "random" || model_name == "ランダム"
@@ -180,7 +272,7 @@ def scaffold_post(models, opts)
     ---
     layout: post
     title: "#{safe_title}"
-    date: #{date.strftime("%Y-%m-%d")}
+    date: #{format_front_matter_date(published_at)}
     tags:
       - #{model['name']}
 
@@ -190,13 +282,17 @@ def scaffold_post(models, opts)
     #{body}
   MD
 
-  archive = ensure_archive!(date)
+  archive = ensure_archive!(published_at)
+  info = classify_publish_at(published_at)
   {
     path: path,
     archive: archive,
     model: model,
     title: title,
-    slug: slug
+    slug: slug,
+    published_at: published_at,
+    publish_kind: info[:kind],
+    publish_label: info[:label]
   }
 end
 
@@ -246,6 +342,24 @@ def self_test(models)
   body = "あ" * 800
   abort "char count" unless count_body_chars("---\ntitle: x\n---\n\n#{body}") == 800
 
+  frozen = Time.new(2026, 8, 15, 1, 0, 0, JST_OFFSET)
+  past = parse_jst("8月10日 21時", now: frozen)
+  abort "parse 8月10日" unless past.year == 2026 && past.month == 8 && past.day == 10 && past.hour == 21
+  abort "parse 8月10日 offset" unless past.utc_offset == 9 * 3600
+  tomorrow = parse_jst("明日 9時", now: frozen)
+  abort "parse 明日" unless tomorrow.day == 16 && tomorrow.hour == 9
+  iso = parse_jst("2026-08-20 09:00:00 +0900")
+  abort "parse iso" unless iso.day == 20 && iso.hour == 9
+  abort "classify past" unless classify_publish_at(past, now: frozen)[:kind] == "past"
+  abort "classify future" unless classify_publish_at(iso, now: frozen)[:kind] == "future"
+  abort "fm date" unless format_front_matter_date(iso) == "2026-08-20 09:00:00 +0900"
+
+  due = due_posts(
+    since: Time.new(2026, 8, 15, 0, 0, 0, JST_OFFSET),
+    now: Time.new(2026, 8, 20, 9, 5, 0, JST_OFFSET)
+  )
+  abort "due helper" unless due.is_a?(Array)
+
   puts "self-test ok (#{models.length} models)"
 end
 
@@ -256,7 +370,9 @@ def usage
       ruby scripts/article.rb suggest [--notes TEXT | --file PATH]
       ruby scripts/article.rb random
       ruby scripts/article.rb issue-comment --file PATH
-      ruby scripts/article.rb scaffold --model NAME|random [--title T] [--slug S] [--notes TEXT]
+      ruby scripts/article.rb scaffold --model NAME|random [--title T] [--slug S] [--notes TEXT] [--date WHEN]
+      ruby scripts/article.rb when --date WHEN
+      ruby scripts/article.rb due --since ISO8601
       ruby scripts/article.rb count --file PATH
       ruby scripts/article.rb self-test
   TXT
@@ -281,7 +397,8 @@ def main
     o.on("--title TEXT") { |v| opts[:title] = v }
     o.on("--slug TEXT") { |v| opts[:slug] = v }
     o.on("--permalink TEXT") { |v| opts[:permalink] = v }
-    o.on("--date DATE") { |v| opts[:date] = Date.parse(v) }
+    o.on("--date WHEN") { |v| opts[:date] = parse_jst(v) }
+    o.on("--since ISO8601") { |v| opts[:since] = Time.parse(v) }
     o.on("--force") { opts[:force] = true }
   end.parse!
 
@@ -320,6 +437,16 @@ def main
     puts "wrote #{result[:path]}"
     puts "model #{result[:model]['name']}"
     puts "archive #{result[:archive]}"
+    puts "publish #{result[:publish_label]}"
+  when "when"
+    t = opts[:date] || now_jst
+    info = classify_publish_at(t)
+    puts "#{info[:kind]}\t#{info[:label]}"
+  when "due"
+    since = opts[:since] or abort "--since required"
+    posts = due_posts(since: since)
+    posts.each { |p| puts "#{format_front_matter_date(p[:time])}\t#{p[:path]}" }
+    exit(posts.empty? ? 1 : 0)
   when "count"
     path = opts[:file] or abort "--file required"
     n = count_body_chars(File.read(path))

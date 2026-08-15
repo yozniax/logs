@@ -6,6 +6,9 @@ url: "https://briscape.com"
 baseurl: ""
 
 lang: ja
+timezone: Asia/Tokyo
+# 未来の date はビルドに出さない。JST の日時を過ぎたら .github/workflows/publish-due-posts.yml が Pages を再ビルドする。
+future: false
 
 repository: yozniax/logs
 

@@ -50,6 +50,12 @@ body:
     attributes:
       label: タイトル
       description: 空なら生成時に付けます。
+  - type: input
+    id: published_at
+    attributes:
+      label: 投稿日時（JST）
+      description: 空なら今。過去ならその時刻で即反映。未来ならその時刻に反映。
+      placeholder: 2026-08-20 09:00
   - type: textarea
     id: extra
     attributes:

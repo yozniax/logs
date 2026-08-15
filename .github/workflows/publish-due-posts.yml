@@ -1,0 +1,36 @@
+name: Publish due posts
+
+on:
+  schedule:
+    - cron: "7,22,37,52 * * * *"
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+      - name: Rebuild Pages if a scheduled post is due
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          last="$(gh api "repos/${GITHUB_REPOSITORY}/pages/builds" --jq '.[0].created_at' 2>/dev/null || true)"
+          if [ -z "${last}" ]; then
+            last="1970-01-01T00:00:00Z"
+          fi
+          echo "last pages build: ${last}"
+          if ruby scripts/article.rb due --since "${last}"; then
+            echo "requesting GitHub Pages rebuild"
+            gh api -X POST "repos/${GITHUB_REPOSITORY}/pages/builds"
+          else
+            echo "no due posts"
+          fi
