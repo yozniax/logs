@@ -1,0 +1,28 @@
+name: Suggest article models
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  suggest:
+    if: >-
+      contains(github.event.issue.labels.*.name, 'article')
+      || startsWith(github.event.issue.title, '[記事]')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+      - name: Suggest models
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BODY_FILE: ${{ runner.temp }}/issue-body.md
+        run: |
+          set -euo pipefail
+          python3 -c 'import json,os,pathlib; e=json.loads(pathlib.Path(os.environ["GITHUB_EVENT_PATH"]).read_text()); pathlib.Path(os.environ["BODY_FILE"]).write_text(e["issue"].get("body") or "", encoding="utf-8")'
+          comment="$(ruby scripts/article.rb issue-comment --file "$BODY_FILE")"
+          gh issue comment "${{ github.event.issue.number }}" --body "$comment"

@@ -1,0 +1,63 @@
+name: 記事メモ
+description: 使わなくてよいです。普段は iPhone の Cursor にメモを投げてください。
+title: "[記事] "
+labels: [article]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        普段は GitHub を開かず、Cursor（iPhone アプリ）にメモを投げてください。
+        この Issue は予備です。
+  - type: textarea
+    id: memo
+    attributes:
+      label: メモ
+      description: 少量で乱雑でよいです。事実だけ残し、文章はこちらで作ります。
+      placeholder: |
+        今日歌舞伎町で昼から酒。友だちが遅れた。街は外国人ばかり。人と会うためにあるんだと思った。
+    validations:
+      required: true
+  - type: dropdown
+    id: model
+    attributes:
+      label: モデル
+      description: 決まっていなければおまかせ。選ばずに任せたいときはランダム。
+      options:
+        - おまかせ（候補を3つ出してほしい）
+        - ランダム
+        - 太宰治
+        - 夏目漱石
+        - 菊池寛
+        - 村上春樹
+        - 坂口安吾
+        - 三島由紀夫
+        - 寺山修司
+        - 安部公房
+        - 中原中也
+        - 林芙美子
+        - 泉鏡花
+        - 織田作之助
+        - 町田町蔵
+        - 北大路魯山人
+        - 中谷宇吉郎
+        - 司馬遼太郎
+        - 柿本人麻呂
+      default: 0
+    validations:
+      required: true
+  - type: input
+    id: title
+    attributes:
+      label: タイトル
+      description: 空なら生成時に付けます。
+  - type: input
+    id: published_at
+    attributes:
+      label: 投稿日時（JST）
+      description: 空なら今。過去ならその時刻で即反映。未来ならその時刻に反映。
+      placeholder: 2026-08-20 09:00
+  - type: textarea
+    id: extra
+    attributes:
+      label: 補足
+      description: 書いてほしくないこと、固有名詞、日付など。

@@ -61,6 +61,46 @@ DNS が Cloudflare 管理の場合は、GitHub の [apex 用ドキュメント](
 
 ## 記事の追加
 
+乱雑なメモからでよい。本文の目安は **800字**。GitHub は開かなくてよい。
+
+### いちばん楽な流れ（iPhone の Cursor）
+
+1. Cursor アプリでこのリポジトリのエージェントを開く。  
+2. メモを投げる。整える必要はない。
+
+```
+記事
+今日歌舞伎町で昼から酒。友が遅れた。街は外国人ばかり。
+```
+
+3. 候補が3つ来る。`1` / `2` / `3` / `ランダム`、または作家名を返す。  
+4. 本文が出る。修正を指示できる。  
+5. `commit / push / merge を一気にやる？` と聞かれる。よいときだけ出す。
+
+モデルや日時を先に書いてよい（例: `ランダムで` / `太宰で` / `8月10日21時で` / `明日9時で`）。
+写真を添付すると、既存記事と同じ位置に記事画像として入る（iPhone の写真は縮小する）。
+X の投稿 URL を混ぜてよい。中身を読んで書く。本文には URL を入れない。
+
+- 過去の日時 → そのタイムスタンプで、merge した瞬間に載る。  
+- 未来の日時 → JST のその時刻まで出ない。時刻を過ぎると自動で反映する。
+
+```bash
+# メモから候補を見る / ランダムに一人選ぶ
+ruby scripts/article.rb suggest --notes '昼から酒。街は外国人ばかり。'
+ruby scripts/article.rb random
+
+# 骨格だけ先に置く（本文はモデルの声で書き直す）
+ruby scripts/article.rb scaffold --model random --title "題" --slug example
+
+# 写真を記事用に縮小する / Xの投稿を読む
+ruby scripts/article.rb prepare-image --file photo.jpg --date '2026-08-15 10:00' --slug example
+ruby scripts/article.rb fetch-x --notes 'https://x.com/user/status/123'
+```
+
+詳細な約束は **`AGENTS.md`**。モデルの声は **`_data/models.yml`**。
+
+### 手でファイルを置く場合
+
 1. `_posts/YYYY-MM-DD-slug.md` を作成する。  
 2. フロントマター例:
 
@@ -76,7 +116,7 @@ image:   # 任意。画像は assets/post-images/ を参照
 ---
 ```
 
-3. 新しいモデル（作家）を増やすときは **`model/<slug>.md`** を追加し、**`_data/tag_slugs.yml`** に `"作家名": slug` を追記する。
+3. 新しいモデル（作家）を増やすときは **`model/<slug>.md`** を追加し、**`_data/tag_slugs.yml`** と **`_data/models.yml`** に同じ作家名を追記する。
 
 ## README について
 
