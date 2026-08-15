@@ -42,12 +42,17 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
+}
+
+.site-brand {
+  min-width: 0;
 }
 
 .site-title {
   margin: 0;
   font-size: 1.6rem;
-  font-weight: 400;
+  font-weight: 700;
   letter-spacing: 0.05em;
   font-family: var(--font-site);
 }
@@ -62,10 +67,20 @@ body {
   opacity: 0.6;
 }
 
+.site-description {
+  margin: 0.4em 0 0;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: #888;
+}
+
 .about-link {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
   text-decoration: none;
   color: #666;
   font-size: 0.85rem;
@@ -605,6 +620,10 @@ body {
 
   .site-title {
     font-size: 1.4rem;
+  }
+
+  .site-description {
+    font-size: 0.7rem;
   }
 
   .site-content {
