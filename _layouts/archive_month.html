@@ -14,11 +14,8 @@ layout: default
       <article class="post-item">
         <div class="post-item-row">
           <h2 class="post-item-title">
-            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>{% include model_byline.html doc=post %}
           </h2>
-          <div class="post-item-model-wrap">
-            {% include model_byline.html doc=post %}
-          </div>
           <time class="post-item-date" datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y-%m-%d" }}</time>
         </div>
       </article>
