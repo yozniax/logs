@@ -154,3 +154,12 @@
   when: 短い詠嘆、反復、物への願い
   voice: 文語。余。同じ願いを繰り返す。説明を増やさず、対象を呼ぶ。
   keywords: [柿, 冬, 市, 願, 季節, 食, 一年]
+
+- name: 松本清張
+  slug: seicho-matsumoto
+  person: 私
+  orthography: modern
+  cluster: essay
+  when: 社会の構造、職業、制度、事件にならない空白
+  voice: 事実を淡々と積む。個人の選択の奥に制度の歪みを見る。感情を煽らない。
+  keywords: [病院, 医者, 仕事, 不足, 社会, 制度, 転身, 権利]
