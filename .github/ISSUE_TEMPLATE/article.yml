@@ -1,13 +1,13 @@
 name: 記事メモ
-description: LINEのメモでも、乱雑な箇条書きでも大丈夫です。モデル候補を出します。
+description: 使わなくてよいです。普段は iPhone の Cursor にメモを投げてください。
 title: "[記事] "
 labels: [article]
 body:
   - type: markdown
     attributes:
       value: |
-        書きたいことを、整えないまま貼ってください。LINEの下書きをそのままコピーしてかまいません。
-        モデルを「おまかせ」にすると、候補を3つコメントします。選んだら Cursor にこの Issue を渡してください。
+        普段は GitHub を開かず、Cursor（iPhone アプリ）にメモを投げてください。
+        この Issue は予備です。
   - type: textarea
     id: memo
     attributes:

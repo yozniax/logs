@@ -91,8 +91,7 @@ def suggest_markdown(models, notes)
   lines << ""
   lines << "0. ランダム"
   lines << ""
-  lines << "選んだら、この Issue を Cursor Cloud Agent に渡すか、コメントで指定してください。"
-  lines << "本文の目安は #{TARGET_CHARS} 字（#{CHAR_MIN}〜#{CHAR_MAX} 字）です。"
+  lines << "番号か名前、または 0 で選んでください。本文は #{TARGET_CHARS} 字程度です。"
   lines.join("\n")
 end
 
@@ -307,15 +306,11 @@ def main
       puts suggest_markdown(models, notes)
     elsif choice.include?("ランダム")
       m = random_model(models)
-      puts "ランダムで **#{m['name']}** を選びました（#{m['when']}）。"
-      puts
-      puts "この Issue を Cursor Cloud Agent に渡して、#{TARGET_CHARS} 字程度で書いてください。"
+      puts "ランダムで **#{m['name']}** を選びました（#{m['when']}）。#{TARGET_CHARS} 字程度で書きます。"
     else
       m = find_model(models, choice)
       if m
-        puts "モデルは **#{m['name']}** です（#{m['when']}）。"
-        puts
-        puts "この Issue を Cursor Cloud Agent に渡して、#{TARGET_CHARS} 字程度で書いてください。"
+        puts "モデルは **#{m['name']}** です（#{m['when']}）。#{TARGET_CHARS} 字程度で書きます。"
       else
         puts suggest_markdown(models, notes)
       end
