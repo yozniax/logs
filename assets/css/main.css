@@ -58,7 +58,7 @@ body {
 }
 
 .site-title a {
-  color: var(--link-color);
+  color: #1a1a1a;
   text-decoration: none;
   transition: opacity 0.2s ease;
 }
