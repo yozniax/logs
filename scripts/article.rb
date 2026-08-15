@@ -9,6 +9,10 @@ require "date"
 require "time"
 require "optparse"
 require "fileutils"
+require "json"
+require "net/http"
+require "uri"
+require "open3"
 
 JST_OFFSET = "+09:00"
 
@@ -231,6 +235,152 @@ def post_filename(date, slug)
   File.join(ROOT, "_posts", "#{date.strftime("%Y-%m-%d")}-#{slug}.md")
 end
 
+X_STATUS_RE = %r{
+  https?://(?:www\.)?(?:x\.com|twitter\.com|fxtwitter\.com|vxtwitter\.com)
+  /(?:[A-Za-z0-9_]+/status|i/web/status|status)
+  /(\d+)
+}ix
+
+URL_IN_BODY_RE = %r{(?:https?://|www\.)\S+|x\.com/\S+|twitter\.com/\S+|t\.co/\S+}i
+
+def extract_x_urls(text)
+  text.to_s.scan(X_STATUS_RE).flatten.uniq.map do |id|
+    { id: id, url: "https://x.com/i/status/#{id}" }
+  end
+end
+
+def http_get_json(url, limit = 3)
+  uri = URI(url)
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.use_ssl = (uri.scheme == "https")
+  http.open_timeout = 8
+  http.read_timeout = 10
+  req = Net::HTTP::Get.new(uri)
+  req["User-Agent"] = "BrilliantScapeArticleBot/1.0"
+  res = http.request(req)
+  if res.is_a?(Net::HTTPRedirection) && limit.positive?
+    loc = res["location"]
+    return http_get_json(loc, limit - 1) if loc
+  end
+  return nil unless res.is_a?(Net::HTTPSuccess)
+  JSON.parse(res.body)
+rescue StandardError
+  nil
+end
+
+def http_get_text(url, limit = 3)
+  uri = URI(url)
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.use_ssl = (uri.scheme == "https")
+  http.open_timeout = 8
+  http.read_timeout = 10
+  req = Net::HTTP::Get.new(uri)
+  req["User-Agent"] = "BrilliantScapeArticleBot/1.0"
+  res = http.request(req)
+  if res.is_a?(Net::HTTPRedirection) && limit.positive?
+    loc = res["location"]
+    return http_get_text(loc, limit - 1) if loc
+  end
+  return nil unless res.is_a?(Net::HTTPSuccess)
+  res.body
+rescue StandardError
+  nil
+end
+
+def tweet_from_fx(id)
+  %W[
+    https://api.fxtwitter.com/status/#{id}
+    https://api.vxtwitter.com/Twitter/status/#{id}
+  ].each do |url|
+    data = http_get_json(url)
+    next unless data.is_a?(Hash)
+    tweet = data["tweet"] || data
+    text = tweet["text"] || tweet["full_text"]
+    next if text.to_s.strip.empty?
+    user = tweet["author"] || tweet["user"] || {}
+    return {
+      id: id,
+      text: text.to_s.strip,
+      name: (user["name"] || tweet["authorName"]).to_s,
+      screen_name: (user["screen_name"] || user["screenName"] || tweet["authorHandle"]).to_s
+    }
+  end
+  nil
+end
+
+def tweet_from_oembed(id)
+  url = "https://publish.twitter.com/oembed?omit_script=true&url=#{URI.encode_www_form_component("https://twitter.com/i/status/#{id}")}"
+  data = http_get_json(url)
+  return nil unless data.is_a?(Hash)
+  html = data["html"].to_s
+  text = html.gsub(/<br\s*\/?>/i, "\n").gsub(/<[^>]+>/, " ").gsub(/\s+/, " ").strip
+  return nil if text.empty?
+  {
+    id: id,
+    text: text,
+    name: data["author_name"].to_s,
+    screen_name: ""
+  }
+end
+
+def fetch_x_status(id)
+  tweet_from_fx(id) || tweet_from_oembed(id)
+end
+
+def fetch_x_from_notes(notes)
+  extract_x_urls(notes).map do |item|
+    tweet = fetch_x_status(item[:id])
+    tweet ? item.merge(tweet) : item.merge(text: nil)
+  end
+end
+
+def format_x_context(items)
+  items.map do |item|
+    if item[:text]
+      who = [item[:name], item[:screen_name]].reject(&:empty?).join(" / ")
+      who = "投稿" if who.empty?
+      "Xの内容（本文にURLは書かない）:\n#{who}\n#{item[:text]}"
+    else
+      "Xの取得に失敗: #{item[:id]}"
+    end
+  end.join("\n\n")
+end
+
+def strip_urls_for_notes(text)
+  text.to_s.gsub(X_STATUS_RE, "").gsub(%r{https?://\S+}i, "").gsub(/\n{3,}/, "\n\n").strip
+end
+
+def body_has_url?(markdown)
+  text = markdown.to_s.sub(/\A---\n.*?\n---\n/m, "")
+  text = text.gsub(/!\[[^\]]*\]\([^\n]+\)/, "")
+  text = text.gsub(/<!--.*?-->/m, "")
+  text.match?(URL_IN_BODY_RE)
+end
+
+def image_public_path(date, slug)
+  "/assets/post-images/#{date.strftime("%Y%m%d")}-#{slug}.jpg"
+end
+
+def image_dest_path(date, slug)
+  File.join(ROOT, image_public_path(date, slug).sub(%r{\A/}, ""))
+end
+
+def prepare_image(src, date:, slug:)
+  dest = image_dest_path(date, slug)
+  script = File.join(ROOT, "scripts", "resize_image.py")
+  stdout, stderr, status = Open3.capture3("python3", script, "--file", src, "--out", dest)
+  abort(stderr.empty? ? stdout : stderr) unless status.success?
+  {
+    dest: dest,
+    public: image_public_path(date, slug),
+    info: stdout.strip
+  }
+end
+
+def image_markdown(title, public_path)
+  "![#{title}]({{ '#{public_path}' | relative_url }})\n"
+end
+
 def scaffold_post(models, opts)
   published_at = opts[:date] ? time_to_jst(opts[:date]) : now_jst
   date = published_at
@@ -267,6 +417,15 @@ def scaffold_post(models, opts)
       "<!-- メモ。このまま公開せず、モデルの声で書き直す。\n#{notes}\n-->\n"
     end
 
+  image_line = ""
+  image_front = ""
+  prepared = nil
+  if opts[:image]
+    prepared = prepare_image(opts[:image], date: published_at, slug: slug)
+    image_front = "image: #{prepared[:public]}\n"
+    image_line = "#{image_markdown(title, prepared[:public])}\n"
+  end
+
   safe_title = title.gsub("\\", "").gsub('"', "")
   File.write(path, <<~MD)
     ---
@@ -277,9 +436,9 @@ def scaffold_post(models, opts)
       - #{model['name']}
 
     permalink: #{permalink}
-    ---
+    #{image_front}---
 
-    #{body}
+    #{image_line}#{body}
   MD
 
   archive = ensure_archive!(published_at)
@@ -292,13 +451,14 @@ def scaffold_post(models, opts)
     slug: slug,
     published_at: published_at,
     publish_kind: info[:kind],
-    publish_label: info[:label]
+    publish_label: info[:label],
+    image: prepared
   }
 end
 
 def count_body_chars(markdown)
   text = markdown.to_s.sub(/\A---\n.*?\n---\n/m, "")
-  text = text.gsub(/!\[[^\]]*\]\([^)]+\)/, "")
+  text = text.gsub(/!\[[^\]]*\]\([^\n]+\)/, "")
   text = text.gsub(/<!--.*?-->/m, "")
   text.gsub(/\s+/, "").length
 end
@@ -360,6 +520,14 @@ def self_test(models)
   )
   abort "due helper" unless due.is_a?(Array)
 
+  urls = extract_x_urls("見て https://x.com/yozniax/status/1234567890123456789 これ")
+  abort "extract x" unless urls.length == 1 && urls.first[:id] == "1234567890123456789"
+  abort "strip urls" unless strip_urls_for_notes("見て https://x.com/yozniax/status/1 これ").include?("見て")
+  with_url = "---\ntitle: x\n---\n\n本文 https://x.com/a/status/1\n"
+  abort "url check should catch" unless body_has_url?(with_url)
+  abort "url check false positive" if body_has_url?("---\nimage: /assets/post-images/a.jpg\n---\n\n![題]({{ '/assets/post-images/a.jpg' | relative_url }})\n本文だけ\n")
+  abort "image md count" unless count_body_chars("---\ntitle: x\n---\n\n![題]({{ '/a.jpg' | relative_url }})\n#{"あ" * 800}\n") == 800
+
   puts "self-test ok (#{models.length} models)"
 end
 
@@ -370,7 +538,10 @@ def usage
       ruby scripts/article.rb suggest [--notes TEXT | --file PATH]
       ruby scripts/article.rb random
       ruby scripts/article.rb issue-comment --file PATH
-      ruby scripts/article.rb scaffold --model NAME|random [--title T] [--slug S] [--notes TEXT] [--date WHEN]
+      ruby scripts/article.rb scaffold --model NAME|random [--title T] [--slug S] [--notes TEXT] [--date WHEN] [--image FILE]
+      ruby scripts/article.rb prepare-image --file FILE --date WHEN --slug SLUG
+      ruby scripts/article.rb fetch-x --notes TEXT
+      ruby scripts/article.rb check-urls --file PATH
       ruby scripts/article.rb when --date WHEN
       ruby scripts/article.rb due --since ISO8601
       ruby scripts/article.rb count --file PATH
@@ -399,6 +570,7 @@ def main
     o.on("--permalink TEXT") { |v| opts[:permalink] = v }
     o.on("--date WHEN") { |v| opts[:date] = parse_jst(v) }
     o.on("--since ISO8601") { |v| opts[:since] = Time.parse(v) }
+    o.on("--image FILE") { |v| opts[:image] = v }
     o.on("--force") { opts[:force] = true }
   end.parse!
 
@@ -438,6 +610,31 @@ def main
     puts "model #{result[:model]['name']}"
     puts "archive #{result[:archive]}"
     puts "publish #{result[:publish_label]}"
+    puts "image #{result[:image][:public]}" if result[:image]
+  when "prepare-image"
+    src = opts[:image] || opts[:file] or abort "--file required"
+    date = opts[:date] || now_jst
+    slug = opts[:slug].to_s.strip
+    abort "--slug required" if slug.empty?
+    result = prepare_image(src, date: date, slug: slug)
+    puts result[:info]
+    puts result[:public]
+  when "fetch-x"
+    notes = read_notes(opts)
+    abort "notes required" if notes.strip.empty?
+    items = fetch_x_from_notes(notes)
+    abort "XのURLが見つかりません" if items.empty?
+    puts format_x_context(items)
+    rest = strip_urls_for_notes(notes)
+    puts "\nメモ（URL除去）:\n#{rest}" unless rest.empty?
+  when "check-urls"
+    path = opts[:file] or abort "--file required"
+    markdown = File.read(path)
+    if body_has_url?(markdown)
+      warn "本文にURLがあります。取り除いてください。"
+      exit 1
+    end
+    puts "no urls"
   when "when"
     t = opts[:date] || now_jst
     info = classify_publish_at(t)
