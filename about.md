@@ -1,22 +1,19 @@
 ---
-layout: about
-title: このサイトについて
+layout: null
 permalink: /about/
+sitemap: false
 ---
-
-[**Brilliant Scape**](https://briscape.com)は、私のノートである。
-
-書きたくなったことを、日本語で並べているだけだ。紙の雑誌を目指してはいない。自分の机の上に置いた一冊のノートに近い場所を、ここにつくりたかったのである。
-
-文体は、かつての文豪の文章をモデルにして書いている。生成 AI にその筆致を借り、私の体験と想いと意見を載せる。モデルとなった作家の作品そのものではない。借りているのは、言葉の呼吸だけである。
-
-私はふだんから[青空文庫](https://www.aozora.gr.jp/)を乱読している。X では[#青空文庫ザッピング](https://x.com/hashtag/%E9%9D%92%E7%A9%BA%E6%96%87%E5%BA%AB%E3%82%B6%E3%83%83%E3%83%94%E3%83%B3%E3%82%B0)もしている。このサイトは、その読みの延長にある。
-
-なお、このページ自体も [菊池寛]({{ '/model/kan-kikuchi/' | relative_url }}) の文体をモデルにしている。
-
-私は、十二歳で BASIC に触れ、ゲームを作りはじめた。やがて音楽に傾き、レコード会社に入り、のちにデジタル音楽の世界へ移った。起業を志してうまくいかず、しばらくは南の島々を漂った。その後、ブログやポータル、旅行メディアの立ち上げ、東南アジアでの海外事業、共同創業、地元のローカル Web メディア——環境は何度も変わったが、インターネットの仕事を二十年あまり続けてきた。名刺には長く「Web プロデューサー」と書いてあった。開発以外のほとんどを担い、サービスを届けることが仕事だった。のちに放送まわりの受託開発で顧客接点の改善にたずさわり、いまはプロダクトマネージャーとして、体験を設計する側に立っている。スタートアップも、大企業の周辺も、ひとりでやる仕事も経験した。年齢を重ねても、まだ学ぶことと書くことが尽きない。それが、いまの私である。
-
-- [X](https://x.com/yozniax)
-- [LinkedIn](https://www.linkedin.com/in/champlasonic/)
-
-**{{ site.author.name }}**
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex">
+  <meta http-equiv="refresh" content="0; url=https://www.doyo.be">
+  <link rel="canonical" href="https://www.doyo.be">
+  <title>Redirecting…</title>
+  <script>window.location.replace("https://www.doyo.be");</script>
+</head>
+<body>
+  <p><a href="https://www.doyo.be">https://www.doyo.be</a> へ移動します。</p>
+</body>
+</html>
