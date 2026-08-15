@@ -127,7 +127,7 @@ body {
 
 .post-item-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: baseline;
   gap: 12px 20px;
   margin-bottom: 12px;
@@ -152,10 +152,10 @@ body {
   opacity: 0.6;
 }
 
-.post-item-model-wrap {
-  text-align: center;
+.post-item-title .post-item-model {
+  margin-left: 0.55em;
+  font-weight: 400;
   white-space: nowrap;
-  flex-shrink: 0;
 }
 
 .post-item-model {
@@ -549,6 +549,11 @@ body {
   color: #000;
 }
 
+.model-page-title .model-name-suffix {
+  font-weight: 400;
+  letter-spacing: 0.03em;
+}
+
 .model-archive-page .archive-page-title,
 .archive-month-page .archive-page-title {
   padding-bottom: 16px;
@@ -627,25 +632,12 @@ body {
     gap: 16px;
   }
 
-  /* タイトルは1行目全幅、by model と日付は2行目で折り返さず1行 */
+  /* タイトルと by model は同じ行に続け、日付は右 */
   .post-item-row {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-rows: auto auto;
     align-items: baseline;
     gap: 6px 12px;
-  }
-
-  .post-item-title {
-    grid-column: 1 / -1;
-  }
-
-  .post-item-model-wrap {
-    text-align: left;
-    white-space: nowrap;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   .post-item-date {

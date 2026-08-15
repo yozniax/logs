@@ -4,7 +4,7 @@ layout: default
 <main class="site-content">
   <div class="container model-archive-page">
     <p class="back-to-posts"><a href="{{ '/' | relative_url }}">← All Posts</a></p>
-    <h1 class="archive-page-title model-page-title">{{ page.model_tag }}</h1>
+    <h1 class="archive-page-title model-page-title">{{ page.model_tag }} <span class="model-name-suffix">model</span></h1>
     <div class="post-list tag-index-list">
       {% for t in site.tags %}
         {% if t[0] == page.model_tag %}
@@ -13,11 +13,8 @@ layout: default
       <article class="post-item">
         <div class="post-item-row">
           <h2 class="post-item-title">
-            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>{% include model_byline.html doc=post %}
           </h2>
-          <div class="post-item-model-wrap">
-            {% include model_byline.html doc=post %}
-          </div>
           <time class="post-item-date" datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y-%m-%d" }}</time>
         </div>
       </article>
