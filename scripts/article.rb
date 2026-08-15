@@ -242,6 +242,13 @@ X_STATUS_RE = %r{
 }ix
 
 URL_IN_BODY_RE = %r{(?:https?://|www\.)\S+|x\.com/\S+|twitter\.com/\S+|t\.co/\S+}i
+DIRECT_IMAGE_RE = %r{https?://[^\s)>\"]+\.(?:jpe?g|png|webp|gif)(?:\?[^\s)>\"]*)?}i
+STAGING_DIR = "/tmp/article-media"
+ATTACHMENT_MAX_AGE = 3600
+ATTACHMENT_SKIP_DIRS = %w[
+  node_modules vendor .git .nvm go pkg cursor-server plugins
+  assets/post-images cloud-agent-transcripts
+].freeze
 
 def extract_x_urls(text)
   text.to_s.scan(X_STATUS_RE).flatten.uniq.map do |id|
@@ -302,7 +309,8 @@ def tweet_from_fx(id)
       id: id,
       text: text.to_s.strip,
       name: (user["name"] || tweet["authorName"]).to_s,
-      screen_name: (user["screen_name"] || user["screenName"] || tweet["authorHandle"]).to_s
+      screen_name: (user["screen_name"] || user["screenName"] || tweet["authorHandle"]).to_s,
+      media: media_urls_from_fx_tweet(tweet)
     }
   end
   nil
@@ -319,7 +327,8 @@ def tweet_from_oembed(id)
     id: id,
     text: text,
     name: data["author_name"].to_s,
-    screen_name: ""
+    screen_name: "",
+    media: []
   }
 end
 
@@ -339,7 +348,10 @@ def format_x_context(items)
     if item[:text]
       who = [item[:name], item[:screen_name]].reject(&:empty?).join(" / ")
       who = "投稿" if who.empty?
-      "Xの内容（本文にURLは書かない）:\n#{who}\n#{item[:text]}"
+      lines = ["Xの内容（本文にURLは書かない）:", who, item[:text]]
+      media = Array(item[:media])
+      lines << "画像:\n#{media.join("\n")}" unless media.empty?
+      lines.join("\n")
     else
       "Xの取得に失敗: #{item[:id]}"
     end
@@ -363,6 +375,137 @@ end
 
 def image_dest_path(date, slug)
   File.join(ROOT, image_public_path(date, slug).sub(%r{\A/}, ""))
+end
+
+def twitter_orig_url(url)
+  uri = URI(url)
+  return url unless uri.host.to_s.include?("pbs.twimg.com")
+  query = URI.decode_www_form(uri.query.to_s).to_h
+  query["name"] = "orig"
+  uri.query = URI.encode_www_form(query)
+  uri.to_s
+rescue URI::InvalidURIError
+  url
+end
+
+def media_urls_from_fx_tweet(tweet)
+  media = tweet.is_a?(Hash) ? tweet["media"] : nil
+  return [] unless media.is_a?(Hash)
+  items = Array(media["photos"]) + Array(media["all"])
+  items.filter_map do |item|
+    next unless item.is_a?(Hash)
+    type = item["type"].to_s
+    next unless type.empty? || type == "photo"
+    url = item["url"] || item["original_url"]
+    next if url.to_s.empty?
+    twitter_orig_url(url)
+  end.uniq
+end
+
+def looks_like_url?(value)
+  value.to_s.match?(%r{\Ahttps?://}i)
+end
+
+def extract_direct_image_urls(text)
+  text.to_s.scan(DIRECT_IMAGE_RE).map { |u| twitter_orig_url(u) }.uniq
+end
+
+def http_get_binary(url, limit = 5)
+  uri = URI(url)
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.use_ssl = (uri.scheme == "https")
+  http.open_timeout = 10
+  http.read_timeout = 30
+  req = Net::HTTP::Get.new(uri)
+  req["User-Agent"] = "Mozilla/5.0 (compatible; BrilliantScapeArticleBot/1.0)"
+  res = http.request(req)
+  if res.is_a?(Net::HTTPRedirection) && limit.positive?
+    loc = res["location"]
+    loc = URI.join(url, loc).to_s if loc && !loc.start_with?("http")
+    return http_get_binary(loc, limit - 1) if loc
+  end
+  return nil unless res.is_a?(Net::HTTPSuccess)
+  { body: res.body, content_type: res["content-type"].to_s, url: url }
+rescue StandardError
+  nil
+end
+
+def jpeg?(bytes)
+  bytes.to_s.b.start_with?("\xFF\xD8".b)
+end
+
+def png?(bytes)
+  bytes.to_s.b.start_with?("\x89PNG".b)
+end
+
+def download_image_url(url)
+  FileUtils.mkdir_p(STAGING_DIR)
+  data = http_get_binary(url)
+  abort "画像の取得に失敗: #{url}" unless data && data[:body] && !data[:body].empty?
+  body = data[:body]
+  type = data[:content_type]
+  unless type.start_with?("image/") || jpeg?(body) || png?(body)
+    abort "画像ではない: #{url}"
+  end
+  ext = type.include?("png") || png?(body) ? ".png" : ".jpg"
+  path = File.join(STAGING_DIR, "download-#{Time.now.to_i}#{ext}")
+  File.binwrite(path, body)
+  path
+end
+
+def first_x_media_url(text)
+  items = fetch_x_from_notes(text)
+  items.flat_map { |item| Array(item[:media]) }.find { |u| !u.to_s.empty? }
+end
+
+def resolve_image_source(opts)
+  file = opts[:image] || opts[:file]
+  return file if file && File.file?(file.to_s)
+
+  blob = [opts[:url], opts[:notes], looks_like_url?(file) ? file : nil].compact.join(" ")
+  if blob.match?(X_STATUS_RE)
+    media = first_x_media_url(blob)
+    abort "Xに画像がありません" if media.to_s.empty?
+    return download_image_url(media)
+  end
+
+  direct = extract_direct_image_urls(blob).first
+  return download_image_url(direct) if direct
+
+  found = find_attachments
+  return found.first if found.any? && file.to_s.empty? && opts[:url].to_s.empty?
+
+  abort "--file か --url が必要です（チャット添付はファイルにならないことが多い）"
+end
+
+def skip_attachment_dir?(path)
+  normalized = path.to_s
+  ATTACHMENT_SKIP_DIRS.any? { |part| normalized.include?("/#{part}/") || normalized.end_with?("/#{part}") }
+end
+
+def find_attachments(now: Time.now, max_age: ATTACHMENT_MAX_AGE)
+  roots = [
+    STAGING_DIR,
+    "/tmp",
+    File.join(ROOT),
+    File.join(Dir.home, "Downloads"),
+    Dir.home
+  ]
+  seen = {}
+  roots.uniq.each do |root|
+    next unless File.directory?(root)
+    Dir.glob(File.join(root, "*.{jpg,jpeg,png,webp,heic,gif}"), File::FNM_CASEFOLD).each do |path|
+      next unless File.file?(path)
+      next if skip_attachment_dir?(path)
+      next if now - File.mtime(path) > max_age
+      begin
+        seen[File.realpath(path)] = true
+      rescue Errno::ENOENT
+        next
+      end
+    end
+  end
+  seen.keys.sort_by { |path| -File.mtime(path).to_i }
 end
 
 def prepare_image(src, date:, slug:)
@@ -528,6 +671,22 @@ def self_test(models)
   abort "url check false positive" if body_has_url?("---\nimage: /assets/post-images/a.jpg\n---\n\n![題]({{ '/assets/post-images/a.jpg' | relative_url }})\n本文だけ\n")
   abort "image md count" unless count_body_chars("---\ntitle: x\n---\n\n![題]({{ '/a.jpg' | relative_url }})\n#{"あ" * 800}\n") == 800
 
+  orig = twitter_orig_url("https://pbs.twimg.com/media/HPSIjQCbMAA94Ka.jpg")
+  abort "orig url" unless orig.include?("name=orig")
+  media = media_urls_from_fx_tweet(
+    "media" => {
+      "photos" => [{ "type" => "photo", "url" => "https://pbs.twimg.com/media/abc.jpg" }],
+      "all" => [{ "type" => "photo", "url" => "https://pbs.twimg.com/media/abc.jpg" }]
+    }
+  )
+  abort "media uniq" unless media == ["https://pbs.twimg.com/media/abc.jpg?name=orig"]
+  abort "direct image" unless extract_direct_image_urls("x https://pbs.twimg.com/media/abc.jpg y").length == 1
+  ctx = format_x_context(
+    [{ text: "hi", name: "a", screen_name: "b", media: ["https://pbs.twimg.com/media/abc.jpg?name=orig"] }]
+  )
+  abort "format media" unless ctx.include?("画像:")
+  abort "find type" unless find_attachments(now: Time.now, max_age: 1).is_a?(Array)
+
   puts "self-test ok (#{models.length} models)"
 end
 
@@ -539,7 +698,8 @@ def usage
       ruby scripts/article.rb random
       ruby scripts/article.rb issue-comment --file PATH
       ruby scripts/article.rb scaffold --model NAME|random [--title T] [--slug S] [--notes TEXT] [--date WHEN] [--image FILE]
-      ruby scripts/article.rb prepare-image --file FILE --date WHEN --slug SLUG
+      ruby scripts/article.rb prepare-image --file FILE|--url URL --date WHEN --slug SLUG
+      ruby scripts/article.rb find-attachment
       ruby scripts/article.rb fetch-x --notes TEXT
       ruby scripts/article.rb check-urls --file PATH
       ruby scripts/article.rb when --date WHEN
@@ -571,6 +731,7 @@ def main
     o.on("--date WHEN") { |v| opts[:date] = parse_jst(v) }
     o.on("--since ISO8601") { |v| opts[:since] = Time.parse(v) }
     o.on("--image FILE") { |v| opts[:image] = v }
+    o.on("--url URL") { |v| opts[:url] = v }
     o.on("--force") { opts[:force] = true }
   end.parse!
 
@@ -612,13 +773,20 @@ def main
     puts "publish #{result[:publish_label]}"
     puts "image #{result[:image][:public]}" if result[:image]
   when "prepare-image"
-    src = opts[:image] || opts[:file] or abort "--file required"
+    src = resolve_image_source(opts)
     date = opts[:date] || now_jst
     slug = opts[:slug].to_s.strip
     abort "--slug required" if slug.empty?
     result = prepare_image(src, date: date, slug: slug)
     puts result[:info]
     puts result[:public]
+  when "find-attachment"
+    found = find_attachments
+    if found.empty?
+      puts "none"
+      exit 1
+    end
+    found.each { |path| puts path }
   when "fetch-x"
     notes = read_notes(opts)
     abort "notes required" if notes.strip.empty?

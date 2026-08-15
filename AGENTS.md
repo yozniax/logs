@@ -76,18 +76,24 @@ date: 2026-08-10 21:00:00 +0900
 
 ### 写真
 
-Cursor（iPhone）で写真が添付されていたら、それを記事画像にする。無いなら付けない。
+チャットの写真添付は、モデルには見えることがあるが、**VM にファイルとして届かないことが多い**。同じ添付の再送では直らない。生成画像で代用しない。
 
-1. 添付ファイル（jpg / jpeg / png / heic / webp）を探す。複数なら先頭の1枚だけ。
-2. 縮小して位置情報を捨てる。
+取る順:
+
+1. `ruby scripts/article.rb find-attachment`（直近1時間の実ファイル。複数なら先頭）
+2. メモに X の投稿 URL か画像 URL があれば、それで取る。
 
 ```bash
 python3 -m pip install --user Pillow   # 未導入なら
+ruby scripts/article.rb prepare-image --url 'https://x.com/user/status/…' --date '2026-08-15 10:00' --slug example
+# 実ファイルがあるときだけ --file
 ruby scripts/article.rb prepare-image --file 添付パス --date '2026-08-15 10:00' --slug example
 ```
 
 3. 置き場所は `assets/post-images/YYYYMMDD-slug.jpg`。長辺 1600px、JPEG、おおむね 400KB 以下。
 4. 既存記事と同じく、フロントマターと本文先頭に入れる。CSS（`.post-content img` のグレースケールと余白）がそのまま当たる。
+
+ファイルも URL もないときは、写真なしで本文を出し、「Xの投稿を貼って」とだけ言う。手順は説明しない。
 
 ```yaml
 image: /assets/post-images/20260815-example.jpg
@@ -107,7 +113,7 @@ image: /assets/post-images/20260815-example.jpg
 ruby scripts/article.rb fetch-x --notes 'メモと https://x.com/user/status/…'
 ```
 
-取れた本文・名前を材料にする。足りない情景は補ってよいが、投稿にない事実は足さない。
+取れた本文・名前・画像を材料にする。画像は `prepare-image --url` で記事に入れる。足りない情景は補ってよいが、投稿にない事実は足さない。
 **生成した記事の文中に、その URL も他の URL も書かない。** 「リンクはこちら」とも書かない。
 
 ### ファイル
