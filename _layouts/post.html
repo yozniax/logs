@@ -19,6 +19,9 @@ layout: default
       </header>
 
       <div class="post-content">
+        {% if page.youtube %}
+        {% include youtube_ogp.html id=page.youtube title=page.youtube_title image=page.image %}
+        {% endif %}
         {{ content }}
       </div>
 

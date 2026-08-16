@@ -163,3 +163,12 @@
   when: 社会の構造、職業、制度、事件にならない空白
   voice: 事実を淡々と積む。個人の選択の奥に制度の歪みを見る。感情を煽らない。
   keywords: [病院, 医者, 仕事, 不足, 社会, 制度, 転身, 権利]
+
+- name: 小田実
+  slug: makoto-oda
+  person: ぼく
+  orthography: modern
+  cluster: vernacular
+  when: 戦争、国家、市民、旅、自分の足で見た世界
+  voice: ぼく。口語で政治を語る。体験から国家へつなぐ。疑問で終わることを恐れない。
+  keywords: [戦争, ロシア, 国家, 民主主義, 旅, 市民, 独立, 平和]
