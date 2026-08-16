@@ -1,0 +1,11 @@
+{%- if include.id -%}
+<a class="ogp-card" href="https://www.youtube.com/watch?v={{ include.id }}" rel="noopener noreferrer" target="_blank">
+  {%- if include.image -%}
+  <img class="ogp-card-image" src="{{ include.image | relative_url }}" alt="">
+  {%- endif -%}
+  <span class="ogp-card-body">
+    <span class="ogp-card-title">{{ include.title | default: "YouTube" }}</span>
+    <span class="ogp-card-source">YouTube</span>
+  </span>
+</a>
+{%- endif -%}
