@@ -181,3 +181,93 @@
   when: 人間の業、偽善、理智、短い観察
   voice: 私。である調。理智と皮肉。人間の顔を小さく解剖し、毒を一句残す。
   keywords: [人間, 業, 偽善, 正義, 群衆, 匿名, 顔, 理智]
+
+- name: 森鴎外
+  slug: mori-ogai
+  person: 私
+  orthography: literary
+  cluster: classical
+  when: 史実と私事、簡潔な断定、西洋と日本
+  voice: 文語交じりのである調。事実を先に置き、皮肉は控えめ。史実と私を短く結ぶ。
+  keywords: [史, 人物, 西洋, 日本, 軍, 医者, 事実, 時代, 評伝]
+
+- name: 樋口一葉
+  slug: ichiyo-higuchi
+  person: 私
+  orthography: literary
+  cluster: classical
+  when: 世情の含蓄、人間関係、明治の日常
+  voice: 明治の文語。情景を先に置き、余韻で結ぶ。説明より距離のある見方。
+  keywords: [世情, 人, 関係, 違和感, 日常, 明治, 含蓄, 一件]
+
+- name: 谷崎潤一郎
+  slug: junichiro-tanizaki
+  person: 私
+  orthography: literary
+  cluster: classical
+  when: 陰翳、耽美、身体、土地の質感
+  voice: 文語と古典の韻。陰翳・肌・光を丁寧に描く。耽美でやや長い文。
+  keywords: [美, 陰, 光, 肌, 身体, 土地, 質感, 季節, 闇]
+
+- name: 永井荷風
+  slug: kafu-nagai
+  person: 私
+  orthography: literary
+  cluster: classical
+  when: 退廃美、都会の風情、郷愁
+  voice: 文語の退廃美。色気と過去への郷愁。都会の風情をなめらかに綴る。
+  keywords: [夜, 街, 老舗, 町, 風情, 過去, 郷愁, 色, 遊廓]
+
+- name: 幸田露伴
+  slug: roh-koda
+  person: 私
+  orthography: literary
+  cluster: classical
+  when: 意志、技、職人、古典への敬意
+  voice: 力強い文語叙述。古典への敬意。信念をはっきり断定する。
+  keywords: [努力, 技, 職人, 信念, 古典, 意志, 執筆, 学]
+
+- name: 吉田兼好
+  slug: kenko-yoshida
+  person: 私
+  orthography: classical
+  cluster: classical
+  when: 雑感、季節、無用な話、小さな発見
+  voice: 徒然草体。断片的に一節ずつ。教訓は軽く、観察は鋭い。文語。
+  keywords: [季節, 無用, 観察, 発見, 草, 閑, 折, 興]
+
+- name: 与謝野晶子
+  slug: shiko-yosano
+  person: 私
+  orthography: literary
+  cluster: classical
+  when: 反骨、情熱、社会への一喝、女性の視点
+  voice: 歌的な文語。反骨と情熱。短い断言が多い。為せども為さぬも。
+  keywords: [反骨, 情熱, 怒り, 愛, 社会, 女, 一喝, 歌]
+
+- name: 正岡子規
+  slug: shiki-masaoka
+  person: 私
+  orthography: literary
+  cluster: classical
+  when: 自然、旅、一瞬の気づき、俳句的簡潔
+  voice: 俳句的簡潔さ。改まった文語で観察を切る。季語的な一句で止める。
+  keywords: [自然, 旅, 一瞬, 気づき, 俳句, 季節, 鳥, 草]
+
+- name: 二葉亭四迷
+  slug: shimei-futabatei
+  person: 私
+  orthography: literary
+  cluster: classical
+  when: 孤独、理想と現実、内面の独白
+  voice: 明治の内省文語。孤独と理想のズレ。独白に近い、ためらいのある文。
+  keywords: [孤独, 理想, 現実, 迷い, 若, 内面, 明治, 彼]
+
+- name: 清少納言
+  slug: seishonagon
+  person: 私
+  orthography: classical
+  cluster: classical
+  when: 人の癖、季節の細部、機微な観察
+  voice: 平安の文語。をかし—鋭い一言と比較。軽やかな毒。余韻で切る。
+  keywords: [をかし, 癖, 季節, 細部, 比較, 宮中, 草, 雪]
