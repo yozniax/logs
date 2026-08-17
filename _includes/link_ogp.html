@@ -1,0 +1,12 @@
+{%- assign card = page.ogp[include.key] -%}
+{%- if card -%}
+<a class="ogp-card" href="{{ card.url }}" rel="noopener noreferrer" target="_blank">
+  {%- if card.image -%}
+  <img class="ogp-card-image" src="{{ card.image | relative_url }}" alt="">
+  {%- endif -%}
+  <span class="ogp-card-body">
+    <span class="ogp-card-title">{{ card.title }}</span>
+    <span class="ogp-card-source">{{ card.source }}</span>
+  </span>
+</a>
+{%- endif -%}
