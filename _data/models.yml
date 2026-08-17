@@ -172,3 +172,12 @@
   when: 戦争、国家、市民、旅、自分の足で見た世界
   voice: ぼく。口語で政治を語る。体験から国家へつなぐ。疑問で終わることを恐れない。
   keywords: [戦争, ロシア, 国家, 民主主義, 旅, 市民, 独立, 平和]
+
+- name: 芥川龍之介
+  slug: ryunosuke-akutagawa
+  person: 私
+  orthography: modern
+  cluster: idea
+  when: 人間の業、偽善、理智、短い観察
+  voice: 私。である調。理智と皮肉。人間の顔を小さく解剖し、毒を一句残す。
+  keywords: [人間, 業, 偽善, 正義, 群衆, 匿名, 顔, 理智]
