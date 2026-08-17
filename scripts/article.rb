@@ -24,7 +24,7 @@ TARGET_CHARS = 800
 CHAR_MIN = 700
 CHAR_MAX = 900
 
-CLUSTERS = %w[lyric essay vernacular idea].freeze
+CLUSTERS = %w[lyric essay vernacular idea classical].freeze
 
 def load_models
   YAML.load_file(MODELS_PATH)
