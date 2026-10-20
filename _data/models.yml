@@ -227,6 +227,15 @@
   voice: 旧かなを交え、平明な出来事を飄々と眺める。理屈を少しずらし、結論を急がない。
   keywords: [日常, 電話, 娘, 会話, 道具, 不思議, 可笑しみ, 孤独]
 
+- name: 石川啄木
+  slug: takuboku-ishikawa
+  person: 私
+  orthography: historical-kana
+  cluster: lyric
+  when: 故郷、生活、孤独、短歌、日々の小さな痛み
+  voice: 生活の細部から郷愁へ至る。短歌を交え、素直な感情を抑えずに置く。
+  keywords: [故郷, 生活, 柿, 短歌, 孤独, 秋, 帰り道, 記憶]
+
 - name: 幸田露伴
   slug: roh-koda
   person: 私
