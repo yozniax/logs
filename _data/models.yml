@@ -218,6 +218,15 @@
   voice: 文語の退廃美。色気と過去への郷愁。都会の風情をなめらかに綴る。
   keywords: [夜, 街, 老舗, 町, 風情, 過去, 郷愁, 色, 遊廓]
 
+- name: 内田百閒
+  slug: hyakken-uchida
+  person: 私
+  orthography: historical-kana
+  cluster: essay
+  when: 日常の可笑しみ、孤独、身近な道具、奇妙な会話
+  voice: 旧かなを交え、平明な出来事を飄々と眺める。理屈を少しずらし、結論を急がない。
+  keywords: [日常, 電話, 娘, 会話, 道具, 不思議, 可笑しみ, 孤独]
+
 - name: 幸田露伴
   slug: roh-koda
   person: 私
