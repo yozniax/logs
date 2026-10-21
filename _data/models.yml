@@ -236,6 +236,15 @@
   voice: 生活の細部から郷愁へ至る。短歌を交え、素直な感情を抑えずに置く。
   keywords: [故郷, 生活, 柿, 短歌, 孤独, 秋, 帰り道, 記憶]
 
+- name: 夢野久作
+  slug: kyusaku-yumeno
+  person: 私
+  orthography: historical-kana
+  cluster: idea
+  when: 夢、機械、恐怖、不条理、目覚め
+  voice: 夢と現実の境を曖昧にする。反復と不穏な気配を置き、丁寧な語りで結末を反転させる。
+  keywords: [夢, 機械, 恐怖, 廊下, 音, 目覚め, 不条理, AI]
+
 - name: 幸田露伴
   slug: roh-koda
   person: 私
