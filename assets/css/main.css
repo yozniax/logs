@@ -492,6 +492,14 @@ body {
   color: #1a1a1a;
 }
 
+.ogp-card-description {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: #555;
+}
+
 .ogp-card-source {
   display: block;
   margin-top: 6px;

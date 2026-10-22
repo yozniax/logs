@@ -245,6 +245,15 @@
   voice: 夢と現実の境を曖昧にする。反復と不穏な気配を置き、丁寧な語りで結末を反転させる。
   keywords: [夢, 機械, 恐怖, 廊下, 音, 目覚め, 不条理, AI]
 
+- name: 沢木耕太郎
+  slug: kotaro-sawaki
+  person: 私
+  orthography: modern
+  cluster: essay
+  when: 旅、都市、土地の記憶、移動から生まれる思索
+  voice: 旅の現場から語り始め、土地と人の気配を静かに重ねる。観察を積み、移動が自分に問い返すものへつなぐ。
+  keywords: [旅, 都市, 道, 街, 移動, 本, 人, 記憶]
+
 - name: 幸田露伴
   slug: roh-koda
   person: 私

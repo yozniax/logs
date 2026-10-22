@@ -2,10 +2,17 @@
 {%- if card -%}
 <a class="ogp-card" href="{{ card.url }}" rel="noopener noreferrer" target="_blank">
   {%- if card.image -%}
+  {%- if card.image contains '://' -%}
+  <img class="ogp-card-image" src="{{ card.image }}" alt="">
+  {%- else -%}
   <img class="ogp-card-image" src="{{ card.image | relative_url }}" alt="">
+  {%- endif -%}
   {%- endif -%}
   <span class="ogp-card-body">
     <span class="ogp-card-title">{{ card.title }}</span>
+    {%- if card.description -%}
+    <span class="ogp-card-description">{{ card.description }}</span>
+    {%- endif -%}
     <span class="ogp-card-source">{{ card.source }}</span>
   </span>
 </a>
