@@ -14,7 +14,6 @@ ogp:
     source: makinindonesia.com
     image: https://storage.googleapis.com/studio-design-asset-files/projects/YPqrPXxGW5/s-1880x1500_v-frms_webp_47e4c0fe-3fa4-411b-9e79-0f552459d3bc.jpg
 ---
-
 東京がジャカルタなら、京都はジョグジャカルタだ。
 
 その一文を目にしたとき、私の中で何かがカチリと音を立てた。インドネシアの古都。ボロブドゥールやプランバナンへの玄関口。私がその街について知っていたのは、せいぜいそのくらいのことだった。観光ガイドの片隅に載っている、遺跡と王宮の街。それ以上でも以下でもなかった。
