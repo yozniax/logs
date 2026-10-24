@@ -140,3 +140,18 @@ posted:
   permalink: "/kidoku/"
   at: '2026-10-21T08:41:38+09:00'
   seeded: true
+- path: _posts/2026-10-22-ai-yume.md
+  permalink: "/ai-yume/"
+  at: '2026-10-24T09:05:55+09:00'
+  uri: at://did:plc:g2ouykxmrsnd6mlt7teo7ezp/app.bsky.feed.post/3mylfi74a6c2s
+  cid: bafyreianiznsud2s73j6x3elb2tj7blrwovwabp2m5e3r2i6mq4duhzcoy
+- path: _posts/2026-10-23-kyoto-jogja.md
+  permalink: "/kyoto-jogja/"
+  at: '2026-10-24T09:05:55+09:00'
+  uri: at://did:plc:g2ouykxmrsnd6mlt7teo7ezp/app.bsky.feed.post/3mylfi7c7eg2s
+  cid: bafyreihmjk34j267m2uombja3cf6ym7q6ppmwrrue5imu2b4ka3cflphoq
+- path: _posts/2026-10-24-kokoku-gareki.md
+  permalink: "/kokoku-gareki/"
+  at: '2026-10-24T09:05:55+09:00'
+  uri: at://did:plc:g2ouykxmrsnd6mlt7teo7ezp/app.bsky.feed.post/3mylfi7j43b22
+  cid: bafyreif5yepj7jcks2yj4qihsa234brp45zpezhesvuhb7awto47v5ph6m
