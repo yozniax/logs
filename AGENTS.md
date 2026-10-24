@@ -160,6 +160,16 @@ commit / push / merge を一気にやる？
 
 著者への操作手順（GitHub の開き方など）は書かない。一気に出したあとだけ、PR の URL を残す。
 
+## Bluesky 自動投稿
+
+`main` に新しい `_posts` が入ると、GitHub Actions（`.github/workflows/bluesky-post.yml`）が Bluesky へ投稿する。
+予約投稿は、サイトに載る時刻（JST の `date` を過ぎたあと）に同じ cron で拾う。
+
+- 本文はモデル名と題材を踏まえた短い文（固定パターンにしない）。リンクカードで記事 URL へ誘導する。
+- 投稿したくない記事は front matter に `bluesky: false`。
+- 二重投稿防止は `_data/bluesky_posted.yml`。既存記事はシード済み。
+- Secrets: `BLUESKY_IDENTIFIER` / `BLUESKY_APP_PASSWORD`（未設定なら workflow は何もしない）。
+
 ## Cursor Cloud でのサイト確認
 
 Ruby 3.2 と Bundler がある前提。Docker は使わない。
