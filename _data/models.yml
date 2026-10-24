@@ -307,3 +307,12 @@
   when: 人の癖、季節の細部、機微な観察
   voice: 平安の文語。をかし—鋭い一言と比較。軽やかな毒。余韻で切る。
   keywords: [をかし, 癖, 季節, 細部, 比較, 宮中, 草, 雪]
+
+- name: 宮沢賢治
+  slug: kenji-miyazawa
+  person: わたくし
+  orthography: historical-kana
+  cluster: lyric
+  when: 自然、農、祈り、理想、共同体、科学と信仰
+  voice: やわらかな敬体で語りかける。擬音と透明な色彩を置き、理想と自己犠牲を静かに祈る。
+  keywords: [野原, 風, 光, 農民, 芸術, 祈り, 夢, 花]
