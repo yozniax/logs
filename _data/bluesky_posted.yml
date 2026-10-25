@@ -155,3 +155,8 @@ posted:
   at: '2026-10-24T09:05:55+09:00'
   uri: at://did:plc:g2ouykxmrsnd6mlt7teo7ezp/app.bsky.feed.post/3mylfi7j43b22
   cid: bafyreif5yepj7jcks2yj4qihsa234brp45zpezhesvuhb7awto47v5ph6m
+- path: _posts/2026-10-26-honya-inei.md
+  permalink: "/honya-inei/"
+  at: '2026-10-26T08:41:30+09:00'
+  uri: at://did:plc:g2ouykxmrsnd6mlt7teo7ezp/app.bsky.feed.post/3myqf2frbfl2j
+  cid: bafyreic2d57yien6yftaa7tows7yelhgcf4nnsauqmdhapayh2a73fs66u
