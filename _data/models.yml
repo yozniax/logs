@@ -343,3 +343,12 @@
   when: 怪奇、日常に潜む謎、探偵、都市の暗がり
   voice: 読者への呼びかけから始め、日常の細部に不穏な意味を見出す。推理を積み、真相の余白を残して結ぶ。
   keywords: [事件, 探偵, 謎, 鳥, 夜, 庭, 恐怖, 羽毛, 暗がり]
+
+- name: 井伏鱒二
+  slug: ibuse-masuji
+  person: 私
+  orthography: modern
+  cluster: essay
+  when: 日常の観察、乾いた自省
+  voice: 抑制のある平明な語り。日常の違和感を静かに見つめ、軽い自嘲を残す。
+  keywords: [日常, 観察, 自省]
